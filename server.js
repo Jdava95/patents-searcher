@@ -7,7 +7,7 @@ const Patent = require('./storage/Patent');
 const path = require('path');
 const urlHandler = require('./urlHandler');
 
-const PATH_TO_CSV = path.join(__dirname, './data_copy.csv');
+const PATH_TO_CSV = path.join(__dirname, './data.csv');
 
 function server() {
 

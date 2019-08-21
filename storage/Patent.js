@@ -1,4 +1,4 @@
-const storage = require('../default/storage');
+const getStorageConfig = require('../lib/getStorageConfig');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -76,16 +76,8 @@ const patentSchema = Schema ({
 });
 
 patentSchema.static('updateDoc', async function (options) {
-  options.registrationNumber = options.registrationNumber ? parseInt(options.registrationNumber, 10) : null;
-  options.registrationDate = options.registrationDate ? parseInt(options.registrationDate, 10) : null;
-  options.applicationNumber = options.applicationNumber ? parseInt(options.applicationNumber, 10) : null;
-  options.applicationDate = options.applicationDate ? parseInt(options.applicationDate, 10) : null;
-  options.authorsCount = options.authorsCount ? parseInt(options.authorsCount, 10) : null;
-  options.creationYear = options.creationYear ? parseInt(options.creationYear, 10) : null;
-  options.registrationPublishDate = options.registrationPublishDate ? parseInt(options.registrationPublishDate, 10) : null;
-  options.registrationPublishNumber = options.registrationPublishNumber ? parseInt(options.registrationPublishNumber, 10) : null;
-  options.actual = options.actual === 'actual';
-  return this.create(options);
+  const patent = new this(options);
+  return patent.save();
 })
 
-module.exports = mongoose.model('Patent', patentSchema, storage.collection);
+module.exports = mongoose.model('Patent', patentSchema, getStorageConfig().collection);

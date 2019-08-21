@@ -1,37 +1,38 @@
+const parserOptions = require('./storage/parserOptions');
+const CsvParser = require('./classes/CsvParser');
+const getConfig = require('./lib/getConfig');
+const Patent = require('./storage/Patent');
 const fetch = require('node-fetch');
 const fs = require('fs');
-const https = require('https');
-const CsvParser = require('./classes/CsvParser');
-const Patent = require('./storage/Patent');
+
+/**
+ * Загрузить файл и распарсить
+ @return {Promise}
+ */
+
+ const globalRegExp = /<\s*a[^>]*>(data-[0-9]{8}-structure-20171019.csv)<\s*\/\s*a>/g;
+ const urlRegExp = /(?<=<a.*>)(.*)(?=<\/a>)/g;
+
 
 async function urlHandler() {
-
-  var globalRegExp = /<\s*a[^>]*>(data-[0-9]{8}-structure-20171019.csv)<\s*\/\s*a>/g;
-  var urlRegExp = /(?<=<a.*>)(.*)(?=<\/a>)/g;
-
-  const response = await fetch('https://rupto.ru/opendata/7730176088-evm')
+  const response = await fetch(getConfig().ruptoUrl)
   const body = await response.text();
-
+  const name = 'Patent';
   let foundHtmlTag = body.match(globalRegExp);
   let foundLink = foundHtmlTag[0].match(urlRegExp);
-  let url = `https://rupto.ru/opendata/7730176088-evm/${foundLink[0]}`;
+  let fileURL = `${getConfig().ruptoUrl}/${foundLink[0]}`;
+  const res = await fetch(fileURL);
+  const resBody = await res.body;
+  resBody.on('end', () => {
+    console.info('Чтение завершено')
+  });
+  const parser = new CsvParser(resBody, Patent);
+  const options = await parserOptions[name] || {};
+  const result = await parser.parse(options);
+  console.info(`Успешно ${result.success} , не успешно ${result.fail}`);
 
-  https.get(url, (res) => {
 
-      const Model = Patent;
-      const name = 'Patent';
 
-      if (!Model) throw new Error(`Model ${name} is undefined`);
-      const parser = new CsvParser(res, Model);
-      const options = parserOptions[name] || {};
-      const result = await parser.parse(options);
-      console.log(`Успешно ${result.success} , не успешно ${result.fail}`)
-
-      res.on('end', () => {
-        console.log('done')
-      })
-  })
 }
-
 
 module.exports = urlHandler;

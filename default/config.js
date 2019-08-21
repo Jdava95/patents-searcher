@@ -1,4 +1,5 @@
  module.exports = {
    port: 3000,
-   bind: 'localhost'
+   bind: 'localhost',
+   ruptoUrl: 'https://rupto.ru/opendata/7730176088-evm'
  }
