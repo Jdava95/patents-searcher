@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 const getStorageConfig = require('../lib/getStorageConfig');
 require('../storage/Patent');
+require('../storage/Version');
 
 function connection() {
   return new Promise((resolve, reject) => {
-    mongoose.connect(`${getStorageConfig().bind}:${getStorageConfig().port}/${getStorageConfig().database}`, {useNewUrlParser: true});
+    const config = getStorageConfig();
+    mongoose.connect(`${config.bind}:${config.port}/${config.database}`, {useNewUrlParser: true});
     const db = mongoose.connection;
     const onError = err => {
       db.removeListener('open', onOpen);

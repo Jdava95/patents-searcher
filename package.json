@@ -12,8 +12,7 @@
     "https": "^1.0.0",
     "moment": "^2.24.0",
     "mongodb": "^3.3.0-beta2",
-    "mongoose": "^5.6.9",
-    "node-cron": "^2.0.3"
+    "mongoose": "^5.6.9"
   },
   "devDependencies": {
     "node-fetch": "^2.6.0"

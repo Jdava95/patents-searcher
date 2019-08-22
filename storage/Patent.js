@@ -1,4 +1,3 @@
-const getStorageConfig = require('../lib/getStorageConfig');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -80,4 +79,4 @@ patentSchema.static('updateDoc', async function (options) {
   return patent.save();
 })
 
-module.exports = mongoose.model('Patent', patentSchema, getStorageConfig().collection);
+module.exports = mongoose.model('Patent', patentSchema, 'Patents');

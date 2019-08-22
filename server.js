@@ -6,7 +6,7 @@ const fileHandler = require('./lib/fileHandler');
 const Patent = require('./storage/Patent');
 const path = require('path');
 const urlHandler = require('./urlHandler');
-
+const checkUpdate = require('./scripts/checkUpdate');
 const PATH_TO_CSV = path.join(__dirname, './data.csv');
 
 function server() {
@@ -26,9 +26,8 @@ function server() {
     res.json(patentInfo);
   })
 
-
   app.get('/checkUpdate', async (req, res) => {
-    await urlHandler();
+    await checkUpdate();
     res.end();
   })
 
