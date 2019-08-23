@@ -13,7 +13,7 @@ async function uploadData(url) {
   const parser = new CsvParser(body, Patent);
   const options = await parserOptions[name] || {};
   const result = await parser.parse(options);
-  return `Успешно ${result.success} , не успешно ${result.fail}`;
+  console.info(`Успешно ${result.success} , не успешно ${result.fail}`);
 }
 
 module.exports = uploadData;

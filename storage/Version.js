@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+/**
+ * Схема версий для монгуса
+ */
 const versionScheme = Schema ({
   url : {
     type: String,

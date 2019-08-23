@@ -7,7 +7,7 @@ const Patent = require('./storage/Patent');
 const path = require('path');
 const urlHandler = require('./urlHandler');
 const checkUpdate = require('./scripts/checkUpdate');
-const PATH_TO_CSV = path.join(__dirname, './data.csv');
+const PATH_TO_CSV = path.join(__dirname, './data-20190701-structure-20171019.csv');
 
 function server() {
 
@@ -32,7 +32,7 @@ function server() {
   })
 
   app.listen(getConfig().port, getConfig().bind, () => {
-    console.log('server was started: ' + getConfig().port);
+    console.info('server was started: ' + getConfig().port);
   });
 
   process.on('uncaughtException', error => {

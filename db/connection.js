@@ -3,6 +3,9 @@ const getStorageConfig = require('../lib/getStorageConfig');
 require('../storage/Patent');
 require('../storage/Version');
 
+/**
+ * Подключение к монгодб
+ */
 function connection() {
   return new Promise((resolve, reject) => {
     const config = getStorageConfig();

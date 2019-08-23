@@ -6,6 +6,7 @@ const urlRegExp = /(?<=<a.*>)(.*)(?=<\/a>)/g;
 
 
 /**
+ * Возвращет url для скачивания csv файла
  * @returns {String}
  */
 async function urlHandler() {

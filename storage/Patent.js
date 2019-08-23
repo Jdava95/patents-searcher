@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+/**
+ * Схема патента для монгуса
+ */
 const patentSchema = Schema ({
   registrationNumber: {
     type: Number,
@@ -74,9 +77,20 @@ const patentSchema = Schema ({
   }
 });
 
+/**
+ * Проверит бд на совпадение данных из потока
+ * Если есть совпадения то обновит информацию
+ * Если совпадений нет то перезапишет
+ * 
+ * @param {options} принимает на вход поток объектов
+ * @return {result} возвращает промис 
+ */
 patentSchema.static('updateDoc', async function (options) {
   const patent = new this(options);
-  return patent.save();
-})
+  const toUpdate = patent.toObject();
+  delete toUpdate._id;
+  const result = await this.updateOne({ registrationNumber: options.registrationNumber },{ $set : toUpdate }, { upsert:true }).exec();
+  return result;
+});
 
 module.exports = mongoose.model('Patent', patentSchema, 'Patents');
