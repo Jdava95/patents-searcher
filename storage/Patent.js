@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 /**
  * Схема патента для монгуса
  */
-const patentSchema = Schema ({
+const PatentSchema = Schema ({
   registrationNumber: {
     type: Number,
     require: false,
@@ -85,12 +85,38 @@ const patentSchema = Schema ({
  * @param {options} принимает на вход поток объектов
  * @return {result} возвращает промис 
  */
-patentSchema.static('updateDoc', async function (options) {
+PatentSchema.static('updateDoc', async function (options) {
   const patent = new this(options);
   const toUpdate = patent.toObject();
   delete toUpdate._id;
-  const result = await this.updateOne({ registrationNumber: options.registrationNumber },{ $set : toUpdate }, { upsert:true }).exec();
+  const result = await this.updateOne(
+    { registrationNumber: options.registrationNumber },
+    { $set : toUpdate },
+    { upsert:true })
+    .exec();
   return result;
 });
 
-module.exports = mongoose.model('Patent', patentSchema, 'Patents');
+/**
+ * @param {Object} Object принимает объект и добавляет запись в коллекцию
+ */
+PatentSchema.static('addPatent', async function (Object) {
+  await this.create(Object);
+});
+
+/**
+ * @param {String} name принимает имя организации и выводит массив совпадений
+ */
+PatentSchema.static('findByNameHolders', async function (name) {
+  const regex = new RegExp(name, 'i');
+  const response = await this.find({ rightHolders: regex }).exec();
+  return response;
+});
+
+PatentSchema.static('findByNameProgram', async function (name) {
+  const regex = new RegExp(name, 'i');
+  const response = await this.find({ programName: regex }).exec();
+  return response;
+})
+
+module.exports = mongoose.model('Patent', PatentSchema, 'Patents');
