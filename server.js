@@ -1,32 +1,30 @@
 const express = require('express');
 const app = express();
 const getConfig = require('./lib/getConfig');
-const Patent = require('./storage/Patent');
-var bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const rpc = require('./RPC');
 
 function server() {
-  app.use(bodyParser.json())
+  app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
 
-  app.post('/holder', async (req, res) => {
-    const query = req.body.name;
-    const response = await Patent.findByNameHolders(query);
-    res.send(response);
-  })
+  app.post('/api/holders', async (req,res) => {
+    const action = await rpc.call({}, req.body);
+    res.send(action);
+  });
 
-   app.post('/program', async (req, res) => {
-     const query = req.body.name;
-     const response = await Patent.findByNameProgram(query);
-     res.send(response)
-   })
+  app.post('/api/id', async (req,res) => {
+    const action = await rpc.call({}, req.body);
+    res.send(action);
+  });
 
   app.listen(getConfig().port, getConfig().bind, () => {
-    console.info('server was started: ' + getConfig().port);
+    console.info('Сервер запушен localhost:' + getConfig().port);
   });
 
   process.on('uncaughtException', error => {
     if (error.code === 'EADDRINUSE') {
-      console.info('Your port is busy, try using another ...');
+      console.info('Порт занят, попробуйте в другой раз.');
       setTimeout(() => {
         process.exit(0);
       }, 1000);

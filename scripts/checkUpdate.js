@@ -9,11 +9,11 @@ const Version = require('../storage/Version');
 async function checkUpdate() {
   const url = await urlHandler();
   const check = await Version.getLastVersion(url);
-  if(check)return console.info('URL уже лежит в базе. Программа окончена')
-  console.info('recording is gone')
+  if(check)return console.info('URL уже лежит в базе.')
+  console.info('Запись пошла.')
   await uploadData(url);
   await Version.addNewActualUrl(url);
-  console.info('dones');
+  console.info('Завершено.');
 }
 
 module.exports = checkUpdate;
