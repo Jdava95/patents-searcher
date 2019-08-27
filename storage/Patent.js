@@ -119,7 +119,7 @@ PatentSchema.static('findByNameHolders', async function (name, limit, lastId) {
     rightHolders: regex
   }
   if(lastId && isValid(lastId)) {
-    query._id = { $lt: lastId};
+    query._id = { $gt: mongoose.Types.ObjectId(lastId)};
   }
   if(!limit || limit <= Limit.MIN) {
     limit = Limit.DEFAULT;
