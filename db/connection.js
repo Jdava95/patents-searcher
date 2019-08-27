@@ -5,6 +5,7 @@ require('../storage/Version');
 
 /**
  * Подключение к монгодб
+ * @returns {Promise}
  */
 function connection() {
   return new Promise((resolve, reject) => {

@@ -1,12 +1,16 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Limit = { MIN: 1, DEFAULT: 10,   MAX: 20 }
+const Limit = {
+  MIN: 1,
+  DEFAULT: 10,
+  MAX: 20
+}
 
 /**
  * Схема патента для монгуса
  */
-const PatentSchema = Schema ({
+const PatentSchema = Schema({
   registrationNumber: {
     type: Number,
     require: false,
@@ -91,10 +95,13 @@ PatentSchema.static('updateDoc', async function (options) {
   const patent = new this(options);
   const toUpdate = patent.toObject();
   delete toUpdate._id;
-  const result = await this.updateOne(
-    { registrationNumber: options.registrationNumber },
-    { $set : toUpdate },
-    { upsert:true })
+  const result = await this.updateOne({
+      registrationNumber: options.registrationNumber
+    }, {
+      $set: toUpdate
+    }, {
+      upsert: true
+    })
     .exec();
   return result;
 });
@@ -111,17 +118,23 @@ function isValid(id) {
 }
 
 /**
- * @param {String} name принимает имя организации и выводит массив совпадений
+ * делает запрос в базу по параметру "Имя компании"
+ * @param {String} name имя организации
+ * @param {Int} limit лимит записей за вывод
+ * @param {Int} lastId последний id за вывод
+ * @returns {JSON} response отдает json 
  */
 PatentSchema.static('findByNameHolders', async function (name, limit, lastId) {
   const regex = new RegExp(name, 'i');
   let query = {
     rightHolders: regex
   }
-  if(lastId && isValid(lastId)) {
-    query._id = { $gt: mongoose.Types.ObjectId(lastId)};
+  if (lastId && isValid(lastId)) {
+    query._id = {
+      $gt: mongoose.Types.ObjectId(lastId)
+    };
   }
-  if(!limit || limit <= Limit.MIN) {
+  if (!limit || limit <= Limit.MIN) {
     limit = Limit.DEFAULT;
   } else if (limit > Limit.MAX) {
     limit = Limit.MAX;
@@ -132,9 +145,59 @@ PatentSchema.static('findByNameHolders', async function (name, limit, lastId) {
   return response;
 });
 
-PatentSchema.static('findByNameProgram', async function (name) {
+/**
+ * делает запрос в базу по параметру "Название программы"
+ * @param {String} name имя организации
+ * @param {Int} limit лимит записей за вывод
+ * @param {Int} lastId последний id за вывод
+ * @returns {JSON} response отдает json 
+ */
+PatentSchema.static('findByNameProgram', async function (name, limit, lastId) {
   const regex = new RegExp(name, 'i');
-  const response = await this.find({ programName: regex }).limit(10).exec();
+  let query = {
+    programName: regex
+  }
+  if (lastId && isValid(lastId)) {
+    query._id = {
+      $gt: mongoose.Types.ObjectId(lastId)
+    };
+  }
+  if (!limit || limit <= Limit.MIN) {
+    limit = Limit.DEFAULT;
+  } else if (limit > Limit.MAX) {
+    limit = Limit.MAX;
+  } else if (!parseInt(limit)) {
+    limit = Limit.DEFAULT;
+  }
+  const response = await this.find(query).limit(limit).exec();
+  return response;
+})
+
+/**
+ * делает запрос в коллекцию по параметру "Авторы"
+ * @param {String} name имя организации
+ * @param {Int} limit лимит записей за вывод
+ * @param {Int} lastId последний id за вывод
+ * @returns {JSON} response отдает json 
+ */
+PatentSchema.static('findByAuthors', async function (name, limit, lastId) {
+  const regex = new RegExp(name, 'i');
+  let query = {
+    authors: regex
+  }
+  if (lastId && isValid(lastId)) {
+    query._id = {
+      $gt: mongoose.Types.ObjectId(lastId)
+    };
+  }
+  if (!limit || limit <= Limit.MIN) {
+    limit = Limit.DEFAULT;
+  } else if (limit > Limit.MAX) {
+    limit = Limit.MAX;
+  } else if (!parseInt(limit)) {
+    limit = Limit.DEFAULT;
+  }
+  const response = await this.find(query).limit(limit).exec();
   return response;
 })
 

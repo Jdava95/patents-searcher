@@ -1,11 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-/**
- * Схема версий для монгуса
- */
-const VersionScheme = Schema ({
-  url : {
+const VersionScheme = Schema({
+  url: {
     type: String,
     require: false,
     default: null
@@ -16,11 +13,15 @@ const VersionScheme = Schema ({
     default: null
   }
 });
+
 /**
  * @param {String} url принимает url и производит поиск
  */
 VersionScheme.static('getLastVersion', async function (url) {
-  const response = await this.findOne({url: url, actual: true}).exec();
+  const response = await this.findOne({
+    url: url,
+    actual: true
+  }).exec();
   return response;
 })
 
@@ -28,10 +29,18 @@ VersionScheme.static('getLastVersion', async function (url) {
  * принимает url находит актуальную запись
  * делает её не актуальной
  * после чего создает новую актуальную запись
+ * @param {String} url 
  */
 VersionScheme.static('addNewActualUrl', async function (url) {
-  await this.findAndModify({actual: true}, {actual: false});
-  await this.create({url: url, actual: true});
+  await this.findAndModify({
+    actual: true
+  }, {
+    actual: false
+  });
+  await this.create({
+    url: url,
+    actual: true
+  });
 })
 
 module.exports = mongoose.model('Version', VersionScheme, 'Versions');

@@ -6,14 +6,11 @@ const rpc = require('./RPC');
 
 function server() {
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.urlencoded({
+    extended: false
+  }));
 
-  app.post('/api/holders', async (req,res) => {
-    const action = await rpc.call({}, req.body);
-    res.send(action);
-  });
-
-  app.post('/api/id', async (req,res) => {
+  app.post('/rpc', async (req, res) => {
     const action = await rpc.call({}, req.body);
     res.send(action);
   });
@@ -26,7 +23,7 @@ function server() {
     if (error.code === 'EADDRINUSE') {
       console.info('Порт занят, попробуйте в другой раз.');
       setTimeout(() => {
-        process.exit(0);
+        process.exit(1);
       }, 1000);
     }
   })
