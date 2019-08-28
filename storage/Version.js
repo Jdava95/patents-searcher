@@ -1,17 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+mongoose.set('useFindAndModify', false);
 
 const VersionScheme = Schema({
-  url: {
-    type: String,
-    require: false,
-    default: null
-  },
-  actual: {
-    type: Boolean,
-    require: false,
-    default: null
-  }
+  url: String,
+  actual: Boolean
 });
 
 /**
@@ -31,14 +24,14 @@ VersionScheme.static('getLastVersion', async function (url) {
  * после чего создает новую актуальную запись
  * @param {String} url 
  */
-VersionScheme.static('addNewActualUrl', async function (url) {
-  await this.findAndModify({
+VersionScheme.static('addNewActualUrl', async function (uri) {
+  await this.findOneAndUpdate({
     actual: true
   }, {
     actual: false
   });
   await this.create({
-    url: url,
+    url: uri,
     actual: true
   });
 })

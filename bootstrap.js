@@ -1,13 +1,16 @@
 const connection = require('./db/connection');
 const server = require('./server.js');
 
-
 /**
- * Подключение к Базе Данных а так же запуск сервера
+ * Поднять все что нужно для работы приложения
+ * @return {Promise}
  */
 async function bootstrap() {
-  await Promise.all([connection(), server()])
-  console.info('was started')
+  await Promise.all([connection(), server().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  })]);
+  console.info('was started');
 }
 
 module.exports = bootstrap;

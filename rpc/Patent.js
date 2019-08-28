@@ -6,32 +6,29 @@ module.exports = {
    * обращается к модулю патент к методу findByNameHolders
    * передает входыне параметры имя, лимит и последний id
    * @param {Object} obj 
-   * @returns {JSON} response 
+   * @returns {Promise}
    */
   async findCompanyByName (obj) {
-    const response = await Patent.findByNameHolders(obj.name, obj.limit, obj.lastId);
-    return response
+    return await Patent.findByNameHolders(obj.name, obj.limit, obj.lastId);
   },
 
   /**
    * обращается к модулю патент к методу findByNameProgram
    * передает входыне параметры имя, лимит и последний id
    * @param {Object} obj 
-   * @returns {JSON} response 
+   * @returns {Promise}
    */
   async findCompanyById (obj) {
-    const response = await Patent.findByNameProgram(obj.name);
-    return response;
+    return await Patent.findByNameProgram(obj.name);
   },
 
   /**
    * обращается к модулю патент к методу findByAuthors
    * передает входыне параметры имя, лимит и последний id
    * @param {Object} obj 
-   * @returns {JSON} response 
+   * @returns {Promise}
    */
   async findCompanyByAuthors (obj) {
-    const response = await Patent.findByAuthors(obj.name, obj.limit);
-    return response;
+    return await Patent.findByAuthors(obj.name, obj.limit);
   }
 }

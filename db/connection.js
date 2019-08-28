@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const getStorageConfig = require('../lib/getStorageConfig');
+const getConfig = require('../lib/getConfig');
+const config = getConfig('storage');
 require('../storage/Patent');
 require('../storage/Version');
 
@@ -9,7 +10,6 @@ require('../storage/Version');
  */
 function connection() {
   return new Promise((resolve, reject) => {
-    const config = getStorageConfig();
     mongoose.connect(`${config.bind}:${config.port}/${config.database}`, {useNewUrlParser: true});
     const db = mongoose.connection;
     const onError = err => {

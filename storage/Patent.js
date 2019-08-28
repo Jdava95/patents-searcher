@@ -84,12 +84,80 @@ const PatentSchema = Schema({
 });
 
 /**
+ * Проверяет на валидность входные параметры
+ * И возвращает query соответствующему методу
+ * @param {String} method 
+ * @param {String} name 
+ * @param {String} lastId 
+ * @return {Object} query
+ */
+function queryValidity (method, name, lastId) {
+  const regex = new RegExp(name, 'i');
+  let query = {};
+
+  switch (method) {
+    case 'findByNameHolders':
+      query = {
+        rightHolders: regex
+      }
+      break;
+    case 'findByAuthors':
+      query = {
+        authors: regex
+      }
+      break;
+    case 'findByNameProgram':
+      query = {
+        programName: regex
+      }
+      break;
+    default:
+      break;
+  }
+
+  if (lastId && isValid(lastId)) {
+    query._id = {
+      $gt: mongoose.Types.ObjectId(lastId)
+    };
+  }
+
+  return query;
+}
+
+/**
+ * Проверяет входное число на соответствия требованиям
+ * @param {Int} limit 
+ * @return {Int} limit
+ */
+function checkLimit (limit) {
+  if (!limit || !parseInt(limit, 10)) {
+    limit = Limit.DEFAULT;
+  } else if (parseInt(limit, 10) < Limit.MIN) {
+    limit = Limit.MIN;
+  } else if (parseInt(limit, 10) > Limit.MAX) {
+    limit = Limit.MAX;
+  }
+
+  return limit;
+}
+
+/**
+ * Проверит входной параметр на валидность id
+ * Возвращает true если входной параметр является id
+ * или false соответственно
+ * @param {ObjectId} id 
+ * @return {Boolean} boolean 
+ */
+function isValid(id) {
+  return mongoose.Types.ObjectId.isValid(id);
+}
+
+/**
  * Проверит бд на совпадение данных из потока
  * Если есть совпадения то обновит информацию
  * Если совпадений нет то перезапишет
- * 
- * @param {options} принимает на вход поток объектов
- * @return {result} возвращает промис 
+ * @param {Object} options принимает на вход поток объектов
+ * @return {Promise} result
  */
 PatentSchema.static('updateDoc', async function (options) {
   const patent = new this(options);
@@ -107,42 +175,16 @@ PatentSchema.static('updateDoc', async function (options) {
 });
 
 /**
- * Проверит входной параметр на валидность id
- * Возвращает true если входной параметр является id
- * или false соответственно
- * @param {ObjectId} id 
- * @return {Boolean} boolean 
- */
-function isValid(id) {
-  return mongoose.Types.ObjectId.isValid(id);
-}
-
-/**
  * делает запрос в базу по параметру "Имя компании"
  * @param {String} name имя организации
  * @param {Int} limit лимит записей за вывод
  * @param {Int} lastId последний id за вывод
- * @returns {JSON} response отдает json 
+ * @return {Promise}
  */
 PatentSchema.static('findByNameHolders', async function (name, limit, lastId) {
-  const regex = new RegExp(name, 'i');
-  let query = {
-    rightHolders: regex
-  }
-  if (lastId && isValid(lastId)) {
-    query._id = {
-      $gt: mongoose.Types.ObjectId(lastId)
-    };
-  }
-  if (!limit || limit <= Limit.MIN) {
-    limit = Limit.DEFAULT;
-  } else if (limit > Limit.MAX) {
-    limit = Limit.MAX;
-  } else if (!parseInt(limit)) {
-    limit = Limit.DEFAULT;
-  }
-  const response = await this.find(query).limit(limit).exec();
-  return response;
+  const query = queryValidity('findByNameHolders', name, lastId);
+  const size = checkLimit(limit);
+  return await this.find(query).limit(size).exec();
 });
 
 /**
@@ -150,27 +192,12 @@ PatentSchema.static('findByNameHolders', async function (name, limit, lastId) {
  * @param {String} name имя организации
  * @param {Int} limit лимит записей за вывод
  * @param {Int} lastId последний id за вывод
- * @returns {JSON} response отдает json 
+ * @return {Promise} 
  */
 PatentSchema.static('findByNameProgram', async function (name, limit, lastId) {
-  const regex = new RegExp(name, 'i');
-  let query = {
-    programName: regex
-  }
-  if (lastId && isValid(lastId)) {
-    query._id = {
-      $gt: mongoose.Types.ObjectId(lastId)
-    };
-  }
-  if (!limit || limit <= Limit.MIN) {
-    limit = Limit.DEFAULT;
-  } else if (limit > Limit.MAX) {
-    limit = Limit.MAX;
-  } else if (!parseInt(limit)) {
-    limit = Limit.DEFAULT;
-  }
-  const response = await this.find(query).limit(limit).exec();
-  return response;
+  const query = queryValidity('findByNameProgram', name, lastId);
+  const size = checkLimit(limit);
+  return await this.find(query).limit(size).exec();
 })
 
 /**
@@ -178,27 +205,12 @@ PatentSchema.static('findByNameProgram', async function (name, limit, lastId) {
  * @param {String} name имя организации
  * @param {Int} limit лимит записей за вывод
  * @param {Int} lastId последний id за вывод
- * @returns {JSON} response отдает json 
+ * @return {Promise}
  */
 PatentSchema.static('findByAuthors', async function (name, limit, lastId) {
-  const regex = new RegExp(name, 'i');
-  let query = {
-    authors: regex
-  }
-  if (lastId && isValid(lastId)) {
-    query._id = {
-      $gt: mongoose.Types.ObjectId(lastId)
-    };
-  }
-  if (!limit || limit <= Limit.MIN) {
-    limit = Limit.DEFAULT;
-  } else if (limit > Limit.MAX) {
-    limit = Limit.MAX;
-  } else if (!parseInt(limit)) {
-    limit = Limit.DEFAULT;
-  }
-  const response = await this.find(query).limit(limit).exec();
-  return response;
+  const query = queryValidity('findByAuthors', name, lastId);
+  const size = checkLimit(limit);
+  return await this.find(query).limit(size).exec();
 })
 
 module.exports = mongoose.model('Patent', PatentSchema, 'Patents');

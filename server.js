@@ -3,29 +3,30 @@ const app = express();
 const getConfig = require('./lib/getConfig');
 const bodyParser = require('body-parser');
 const rpc = require('./RPC');
+const config = getConfig('config');
+const checkUpdate = require('./scripts/checkUpdate');
 
 function server() {
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({
-    extended: false
-  }));
-
-  app.post('/rpc', async (req, res) => {
-    const action = await rpc.call({}, req.body);
-    res.send(action);
-  });
-
-  app.listen(getConfig().port, getConfig().bind, () => {
-    console.info('Сервер запушен localhost:' + getConfig().port);
-  });
-
-  process.on('uncaughtException', error => {
-    if (error.code === 'EADDRINUSE') {
-      console.info('Порт занят, попробуйте в другой раз.');
-      setTimeout(() => {
-        process.exit(1);
-      }, 1000);
-    }
+  return new Promise((resolve, reject) => {
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({
+      extended: false
+    }));
+  
+    app.post('/rpc', async (req, res) => {
+      const action = await rpc.call({}, req.body);
+      res.send(action);
+    });
+    
+    app.get('/gets', async (req, res) => {
+      await checkUpdate();
+      res.send('qweee');
+    })
+    
+    app.listen(config.port, config.bind, () => {
+      console.info('Сервер запушен localhost:' + config.port);
+      return resolve();
+    }).on('error', ()=> {return reject});
   })
 }
 
