@@ -6,10 +6,7 @@ const server = require('./server.js');
  * @return {Promise}
  */
 async function bootstrap() {
-  await Promise.all([connection(), server().catch((err) => {
-    console.error(err);
-    process.exit(1);
-  })]);
+  await Promise.all([connection(), server()]);
   console.info('was started');
 }
 

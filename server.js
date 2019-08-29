@@ -4,7 +4,6 @@ const getConfig = require('./lib/getConfig');
 const bodyParser = require('body-parser');
 const rpc = require('./RPC');
 const config = getConfig('config');
-const checkUpdate = require('./scripts/checkUpdate');
 
 function server() {
   return new Promise((resolve, reject) => {
@@ -17,11 +16,6 @@ function server() {
       const action = await rpc.call({}, req.body);
       res.send(action);
     });
-    
-    app.get('/gets', async (req, res) => {
-      await checkUpdate();
-      res.send('qweee');
-    })
     
     app.listen(config.port, config.bind, () => {
       console.info('Сервер запушен localhost:' + config.port);

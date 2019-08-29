@@ -8,7 +8,7 @@ module.exports = {
    * @param {Object} obj 
    * @returns {Promise}
    */
-  async findCompanyByName (obj) {
+  async findByNameHolders (obj) {
     return await Patent.findByNameHolders(obj.name, obj.limit, obj.lastId);
   },
 
@@ -18,7 +18,7 @@ module.exports = {
    * @param {Object} obj 
    * @returns {Promise}
    */
-  async findCompanyById (obj) {
+  async findByNameProgram (obj) {
     return await Patent.findByNameProgram(obj.name);
   },
 
