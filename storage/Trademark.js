@@ -322,7 +322,7 @@ TrademarkSchema.static('getByRegNumber', async function(number) {
 })
 
 /**
- * делает запрос в базу по параметру "Имя компании"
+ * делает запрос в базу по параметру владелец компании
  * @param {String} name имя организации
  * @param {Int} limit лимит записей за вывод
  * @param {Int} lastId последний id за вывод

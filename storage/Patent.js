@@ -264,7 +264,7 @@ PatentSchema.static('getByRegNumber', async function (number) {
 });
 
 /**
- * делает запрос в базу по параметру "Название программы"
+ * делает запрос в базу по параметру "Авторы"
  * @param {String} name имя организации
  * @param {Int} limit лимит записей за вывод
  * @param {Int} lastId последний id за вывод
@@ -277,7 +277,7 @@ PatentSchema.static('getByAuthors', async function (name, limit, lastId) {
 })
 
 /**
- * делает запрос в коллекцию по параметру "Авторы"
+ * делает запрос в коллекцию по параметру "Название работы"
  * @param {String} name имя организации
  * @param {Int} limit лимит записей за вывод
  * @param {Int} lastId последний id за вывод

@@ -3,8 +3,7 @@ const Patent = require('../storage/Patent');
 module.exports = {
 
   /**
-   * обращается к модулю патент к методу findByNameHolders
-   * передает входыне параметры имя, лимит и последний id
+   * поиск по регистрационному номеру
    * @param {Object} obj 
    * @returns {Promise}
    */
@@ -13,8 +12,7 @@ module.exports = {
   },
 
   /**
-   * обращается к модулю патент к методу findByNameProgram
-   * передает входыне параметры имя, лимит и последний id
+   * поиск по названию метода программы
    * @param {Object} obj 
    * @returns {Promise}
    */
@@ -23,8 +21,7 @@ module.exports = {
   },
 
   /**
-   * обращается к модулю патент к методу findByAuthors
-   * передает входыне параметры имя, лимит и последний id
+   * поиск по авторам
    * @param {Object} obj 
    * @returns {Promise}
    */
