@@ -1,5 +1,4 @@
 module.exports = {
   bind: 'mongodb://localhost',
-  port: 27017,
-  database: 'PatentInformation'
+  port: 27017
 }

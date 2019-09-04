@@ -4,15 +4,18 @@ mongoose.set('useFindAndModify', false);
 
 const VersionScheme = Schema({
   url: String,
+  name: String,
   actual: Boolean
 });
 
 /**
- * @param {String} url принимает url и производит поиск
+ * @param {String} url url scv файла
+ * @param {String} name имя монгусовской модели
  */
-VersionScheme.static('getLastVersion', async function (url) {
+VersionScheme.static('getLastVersion', async function (url, name) {
   const response = await this.findOne({
     url: url,
+    modelName: name,
     actual: true
   }).exec();
   return response;
@@ -24,7 +27,7 @@ VersionScheme.static('getLastVersion', async function (url) {
  * после чего создает новую актуальную запись
  * @param {String} url 
  */
-VersionScheme.static('addNewActualUrl', async function (uri) {
+VersionScheme.static('addNewActualUrl', async function (uri, name) {
   await this.findOneAndUpdate({
     actual: true
   }, {
@@ -32,6 +35,7 @@ VersionScheme.static('addNewActualUrl', async function (uri) {
   });
   await this.create({
     url: uri,
+    modelName: name,
     actual: true
   });
 })

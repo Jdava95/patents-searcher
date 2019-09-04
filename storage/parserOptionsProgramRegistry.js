@@ -1,5 +1,5 @@
 module.exports = {
-  Patent: {
+  ProgramRegistry: {
     columns: [
       'registrationNumber',
       'registrationDate',

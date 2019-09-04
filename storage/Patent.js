@@ -1,15 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const queryValidity = require('../lib/queryValidity');
+const checkLimit = require('../lib/checkLimit');
 
-const Limit = {
-  MIN: 1,
-  DEFAULT: 10,
-  MAX: 20
-}
-
-/**
- * Схема патента для монгуса
- */
 const PatentSchema = Schema({
   registrationNumber: {
     type: Number,
@@ -36,38 +29,198 @@ const PatentSchema = Schema({
     require: false,
     default: null
   },
-  authorsCount: {
-    type: Number,
-    require: false,
-    default: null
-  },
-  rightHolders: {
+  authorsLatin: {
     type: String,
     require: false,
     default: null
   },
-  contactToThirdParties: {
+  patentHolders: {
     type: String,
     require: false,
     default: null
   },
-  programName: {
+  patentHoldersLatin: {
     type: String,
     require: false,
     default: null
   },
-  creationYear: {
+  correspondenceAddress: {
+    type: String,
+    require: false,
+    default: null
+  },
+  correspondenceAddressLatin: {
+    type: String,
+    require: false,
+    default: null
+  },
+  inventionName: {
+    type: String,
+    require: false,
+    default: null
+  },
+  patentStartingDate: {
     type: Number,
     require: false,
     default: null
   },
-  registrationPublishDate: {
+  crimeanInventionApplicationNumberStateRegistrationUkraine: {
     type: Number,
     require: false,
     default: null
   },
-  registrationPublishNumber: {
+  crimeanInventionApplicationDateStateRegistrationUkraine: {
     type: Number,
+    require: false,
+    default: null
+  },
+  crimeanInventionPatentNumberUkraine: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  receiptDateAdditionalDataApplication: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  dateApplicationWhichAdditionalDataHasBeenReceived: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  numberApplicationWhichAdditionalDataHasBeenReceived: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  initialApplicationNumber: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  initialApplicationDate: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  initialApplicationPriorityDate: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  previousApplicationNumber: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  previousApplicationDate: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  parisConventionPriorityNumber: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  parisConventionPriorityDate: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  parisConventionPriorityCountryCode: {
+    type: String,
+    require: false,
+    default: null
+  },
+  PCTApplicationExaminationStartDate: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  PCTApplicationNumber: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  PCTApplicationDate: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  PCTApplicationPublishNumber: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  PCTApplicationPublishDate: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  EAApplicationNumber: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  EAApplicationDate: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  EAApplicationPublishNumber: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  EAApplicationPublishDate: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  applicationPublishDate: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  applicationPublishNumber: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  patentGrantPublishDate: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  patentGrantPublishNumber: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  revokedPatentNumber: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  informationAboutObligationConcludeContractAlienation: {
+    type: String,
+    require: false,
+    default: null
+  },
+  expirationDate: {
+    type: Number,
+    require: false,
+    default: null
+  },
+  inventionFormulaNumbersWhichPatentTermProlonged: {
+    type: String,
+    require: false,
+    default: null
+  },
+  additionalPatent: {
+    type: Boolean,
     require: false,
     default: null
   },
@@ -81,87 +234,11 @@ const PatentSchema = Schema({
     require: false,
     default: null
   }
-});
+})
 
-/**
- * Проверяет на валидность входные параметры
- * И возвращает query соответствующему методу
- * @param {String} method 
- * @param {String} name 
- * @param {String} lastId 
- * @return {Object} query
- */
-function queryValidity (method, name, lastId) {
-  const regex = new RegExp(name, 'i');
-  let query = {};
-
-  switch (method) {
-    case 'findByNameHolders':
-      query = {
-        rightHolders: regex
-      }
-      break;
-    case 'findByAuthors':
-      query = {
-        authors: regex
-      }
-      break;
-    case 'findByNameProgram':
-      query = {
-        programName: regex
-      }
-      break;
-    default:
-      break;
-  }
-
-  if (lastId && isValid(lastId)) {
-    query._id = {
-      $gt: mongoose.Types.ObjectId(lastId)
-    };
-  }
-
-  return query;
-}
-
-/**
- * Проверяет входное число на соответствия требованиям
- * @param {Int} limit 
- * @return {Int} limit
- */
-function checkLimit (limit) {
-  if (!limit || !parseInt(limit, 10)) {
-    limit = Limit.DEFAULT;
-  } else if (parseInt(limit, 10) < Limit.MIN) {
-    limit = Limit.MIN;
-  } else if (parseInt(limit, 10) > Limit.MAX) {
-    limit = Limit.MAX;
-  }
-
-  return limit;
-}
-
-/**
- * Проверит входной параметр на валидность id
- * Возвращает true если входной параметр является id
- * или false соответственно
- * @param {ObjectId} id 
- * @return {Boolean} boolean 
- */
-function isValid(id) {
-  return mongoose.Types.ObjectId.isValid(id);
-}
-
-/**
- * Проверит бд на совпадение данных из потока
- * Если есть совпадения то обновит информацию
- * Если совпадений нет то перезапишет
- * @param {Object} options принимает на вход поток объектов
- * @return {Promise} result
- */
 PatentSchema.static('updateDoc', async function (options) {
-  const patent = new this(options);
-  const toUpdate = patent.toObject();
+  const Patent = new this(options);
+  const toUpdate = Patent.toObject();
   delete toUpdate._id;
   const result = await this.updateOne({
       registrationNumber: options.registrationNumber
@@ -174,17 +251,16 @@ PatentSchema.static('updateDoc', async function (options) {
   return result;
 });
 
+
 /**
- * делает запрос в базу по параметру "Имя компании"
- * @param {String} name имя организации
+ * делает запрос в базу по параметру "Номер регистрации"
+ * @param {Int} number номер регистрации
  * @param {Int} limit лимит записей за вывод
  * @param {Int} lastId последний id за вывод
  * @return {Promise}
  */
-PatentSchema.static('findByNameHolders', async function (name, limit, lastId) {
-  const query = queryValidity('findByNameHolders', name, lastId);
-  const size = checkLimit(limit);
-  return await this.find(query).limit(size).exec();
+PatentSchema.static('getByRegNumber', async function (number) {
+  return await this.findOne({registrationNumber: number}).exec();
 });
 
 /**
@@ -194,8 +270,8 @@ PatentSchema.static('findByNameHolders', async function (name, limit, lastId) {
  * @param {Int} lastId последний id за вывод
  * @return {Promise} 
  */
-PatentSchema.static('findByNameProgram', async function (name, limit, lastId) {
-  const query = queryValidity('findByNameProgram', name, lastId);
+PatentSchema.static('getByAuthors', async function (name, limit, lastId) {
+  const query = queryValidity('authors', name, lastId);
   const size = checkLimit(limit);
   return await this.find(query).limit(size).exec();
 })
@@ -207,8 +283,8 @@ PatentSchema.static('findByNameProgram', async function (name, limit, lastId) {
  * @param {Int} lastId последний id за вывод
  * @return {Promise}
  */
-PatentSchema.static('findByAuthors', async function (name, limit, lastId) {
-  const query = queryValidity('findByAuthors', name, lastId);
+PatentSchema.static('getByInventionName', async function (name, limit, lastId) {
+  const query = queryValidity('inventionName', name, lastId);
   const size = checkLimit(limit);
   return await this.find(query).limit(size).exec();
 })

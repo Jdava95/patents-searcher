@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 const getConfig = require('../lib/getConfig');
 const config = getConfig('storage');
-require('../storage/Patent');
+require('../storage/ProgramRegistry');
 require('../storage/Version');
+require('../storage/Trademark');
+require('../storage/Patent');
 
 /**
  * Подключение к монгодб

@@ -16,7 +16,8 @@ function server() {
       const action = await rpc.call({}, req.body);
       res.send(action);
     });
-    
+
+
     app.listen(config.port, config.bind, () => {
       console.info('Сервер запушен localhost:' + config.port);
       return resolve();

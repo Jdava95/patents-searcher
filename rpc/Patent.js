@@ -8,8 +8,8 @@ module.exports = {
    * @param {Object} obj 
    * @returns {Promise}
    */
-  async findByNameHolders (obj) {
-    return await Patent.findByNameHolders(obj.name, obj.limit, obj.lastId);
+  async getByRegNumber (obj) {
+    return await Patent.getByRegNumber(obj.number);
   },
 
   /**
@@ -18,8 +18,8 @@ module.exports = {
    * @param {Object} obj 
    * @returns {Promise}
    */
-  async findByNameProgram (obj) {
-    return await Patent.findByNameProgram(obj.name);
+  async getByInventionName (obj) {
+    return await Patent.getByInventionName(obj.name, obj.limit, obj.lastId);
   },
 
   /**
@@ -28,7 +28,7 @@ module.exports = {
    * @param {Object} obj 
    * @returns {Promise}
    */
-  async findCompanyByAuthors (obj) {
-    return await Patent.findByAuthors(obj.name, obj.limit);
+  async getByAuthors (obj) {
+    return await Patent.getByAuthors(obj.name, obj.limit, obj.lastId);
   }
 }
