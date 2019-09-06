@@ -29,9 +29,11 @@ VersionScheme.static('getLastVersion', async function (url, name) {
  */
 VersionScheme.static('addNewActualUrl', async function (uri, name) {
   await this.findOneAndUpdate({
-    actual: true
+    actual: true,
+    modelName: name
   }, {
-    actual: false
+    actual: false,
+    modelName: name
   });
   await this.create({
     url: uri,

@@ -47,6 +47,8 @@ module.exports = {
       'additionalPatent',
       'actual',
       'publicationURL',
+      'createdAt',
+      'updatedAt'
     ]  ,
     options: {
         from: 2

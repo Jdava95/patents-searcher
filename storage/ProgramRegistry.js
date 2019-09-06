@@ -2,80 +2,42 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const queryValidity = require('../lib/queryValidity');
 const checkLimit = require('../lib/checkLimit');
+const convertDate = require('../lib/convertDate');
 
 /**
  * Схема патента для монгуса
  */
 const ProgramRegistrySchema = Schema({
-  registrationNumber: {
-    type: Number,
-    require: false,
-    default: null
-  },
+  registrationNumber: Number,
   registrationDate: {
-    type: Number,
-    require: false,
-    default: null
+    type: Date,
+    set: convertDate
   },
-  applicationNumber: {
-    type: Number,
-    require: false,
-    default: null
-  },
+  applicationNumber: Number,
   applicationDate: {
-    type: Number,
-    require: false,
-    default: null
+    type: Date,
+    set: convertDate
   },
-  authors: {
-    type: String,
-    require: false,
-    default: null
-  },
-  authorsCount: {
-    type: Number,
-    require: false,
-    default: null
-  },
-  rightHolders: {
-    type: String,
-    require: false,
-    default: null
-  },
-  contactToThirdParties: {
-    type: String,
-    require: false,
-    default: null
-  },
-  programName: {
-    type: String,
-    require: false,
-    default: null
-  },
-  creationYear: {
-    type: Number,
-    require: false,
-    default: null
-  },
+  authors: String,
+  authorsCount: Number,
+  rightHolders: String,
+  contactToThirdParties: String,
+  programName: String,
+  creationYear: Number,
   registrationPublishDate: {
-    type: Number,
-    require: false,
-    default: null
+    type: Date,
+    set: convertDate
   },
-  registrationPublishNumber: {
-    type: Number,
-    require: false,
-    default: null
+  registrationPublishNumber: Number,
+  actual: Boolean,
+  publicationURL: String,  
+  createdAt: {
+    type: Date,
+    default: Date.now
   },
-  actual: {
-    type: Boolean,
-    require: false,
-    default: null
-  },
-  publicationURL: {
-    type: String,
-    require: false,
-    default: null
+  updatedAt: {
+    type: Date,
+    default: Date.now
   }
 });
 

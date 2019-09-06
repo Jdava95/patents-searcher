@@ -2,297 +2,86 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const queryValidity = require('../lib/queryValidity');
 const checkLimit = require('../lib/checkLimit');
+const convertDate = require('../lib/convertDate');
 
 const TrademarkSchema = Schema({
-  registrationNumber  : {
-    type: String,
-    require: false,
-    default: null
-  },
+  registrationNumber  :String,
   registrationDate : {
-    type: Number,
-    require: false,
-    default: null
+    type: Date,
+    set: convertDate
   },
-  applicationNumber : {
-    type: Number,
-    require: false,
-    default: null
-  },
+  applicationNumber :Number,
   applicationDate : {
-    type: Number,
-    require: false,
-    default: null
+    type: Date,
+    set: convertDate
   },
   priorityDate : {
-    type: Number,
-    require: false,
-    default: null
+    type: Date,
+    set: convertDate
   },
-  exhibitionPriorityDate : {
-    type: Number,
-    require: false,
-    default: null
-  },
-  parisConventionPriorityNumber : {
-    type: String,
-    require: false,
-    default: null
-  },
-  parisConventionPriorityDate : {
-    type: Number,
-    require: false,
-    default: null
-  },
-  parisConventionPriorityCountryCode : {
-    type: String,
-    require: false,
-    default: null
-  },
-  initialApplicationNumber : {
-    type: Number,
-    require: false,
-    default: null
-  },
-  initialApplicationPriorityDate : {
-    type: Number,
-    require: false,
-    default: null
-  },
-  initialRegistrationNumber : {
-    type: Number,
-    require: false,
-    default: null
-  },
-  initialRegistrationDate : {
-    type: Number,
-    require: false,
-    default: null
-  },
-  internationalRegistrationNumber : {
-    type: Number,
-    require: false,
-    default: null
-  },
-  internationalRegistrationDate : {
-    type: Number,
-    require: false,
-    default: null
-  },
-  internationalRegistrationPriorityDate : {
-    type: Number,
-    require: false,
-    default: null
-  },
-  internationalRegistrationEntryDate : {
-    type: Number,
-    require: false,
-    default: null
-  },
-  applicationNumberRecognitionTrademarkFromCrimea : {
-    type: String,
-    require: false,
-    default: null
-  },
-  applicationDateRecognitionTrademarkFromCrimea : {
-    type: Number,
-    require: false,
-    default: null
-  },
-  CrimeanTrademarkApplicationNumberStateRegistrationUkraine : {
-    type: String,
-    require: false,
-    default: null
-  },
-  CrimeanTrademarkApplicationDateStateRegistrationUkraine : {
-    type: Number,
-    require: false,
-    default: null
-  },
-  CrimeanTrademarkCertificateNumberUkraine : {
-    type: String,
-    require: false,
-    default: null
-  },
-  exclusiveRightsTransferAgreementRegistrationNumber : {
-    type: Number,
-    require: false,
-    default: null
-  },
-  exclusiveRightsTransferAgreementRegistrationDate : {
-    type: Number,
-    require: false,
-    default: null
-  },
-  legallyRelatedApplications : {
-    type: String,
-    require: false,
-    default: null
-  },
-  legallyRelatedRegistrations : {
-    type: String,
-    require: false,
-    default: null
-  },
+  exhibitionPriorityDate :Number,
+  parisConventionPriorityNumber :String,
+  parisConventionPriorityDate :Number,
+  parisConventionPriorityCountryCode :String,
+  initialApplicationNumber :Number,
+  initialApplicationPriorityDate :Number,
+  initialRegistrationNumber :Number,
+  initialRegistrationDate :Number,
+  internationalRegistrationNumber :Number,
+  internationalRegistrationDate :Number,
+  internationalRegistrationPriorityDate :Number,
+  internationalRegistrationEntryDate :Number,
+  applicationNumberRecognitionTrademarkFromCrimea :String,
+  applicationDateRecognitionTrademarkFromCrimea :Number,
+  crimeanTrademarkApplicationNumberStateRegistrationUkraine :String,
+  crimeanTrademarkApplicationDateStateRegistrationUkraine :Number,
+  crimeanTrademarkCertificateNumberUkraine :String,
+  exclusiveRightsTransferAgreementRegistrationNumber :Number,
+  exclusiveRightsTransferAgreementRegistrationDate :Number,
+  legallyRelatedApplications :String,
+  legallyRelatedRegistrations :String,
   expirationDate : {
-    type: Number,
-    require: false,
-    default: null
+    type: Date,
+    set: convertDate
   },
-  rightHolderName  : {
-    type: String,
-    require: false,
-    default: null
+  rightHolderName  :String,
+  foreignRightHolderName  :String,
+  rightHolderAddress  :String,
+  rightHolderCountryCode :String,
+  rightHolderOgrn :Number,
+  rightHolderInn :Number,
+  correspondenceAddress :String,
+  collective :Boolean,
+  collectiveUsers :String,
+  extractionFromCharterCollectiveTrademark :String,
+  colorSpecification :String,
+  unprotectedElements :String,
+  kindSpecification :String,
+  threedimensional :Boolean,
+  threedimensionalSpecification :String,
+  holographic :Boolean,
+  holographicSpecification :String,
+  sound :Boolean,
+  soundSpecification :String,
+  olfactory :Boolean,
+  olfactorySpecification :String,
+  color :Boolean,
+  colorTrademarkSpecification :String,
+  light :Boolean,
+  lightSpecification :String,
+  changing :Boolean,
+  changingSpecification :String,
+  positional :Boolean,
+  positionalSpecification :String,
+  actual :Boolean,
+  publicationURL :String,
+  createdAt: {
+    type: Date,
+    default: Date.now
   },
-  foreignRightHolderName  : {
-    type: String,
-    require: false,
-    default: null
-  },
-  rightHolderAddress  : {
-    type: String,
-    require: false,
-    default: null
-  },
-  rightHolderCountryCode : {
-    type: String,
-    require: false,
-    default: null
-  },
-  rightHolderOgrn : {
-    type: Number,
-    require: false,
-    default: null
-  },
-  rightHolderInn : {
-    type: Number,
-    require: false,
-    default: null
-  },
-  correspondenceAddress : {
-    type: String,
-    require: false,
-    default: null
-  },
-  collective : {
-    type: Boolean,
-    require: false,
-    default: null
-  },
-  collectiveUsers : {
-    type: String,
-    require: false,
-    default: null
-  },
-  extractionFromCharterCollectiveTrademark : {
-    type: String,
-    require: false,
-    default: null
-  },
-  colorSpecification : {
-    type: String,
-    require: false,
-    default: null
-  },
-  unprotectedElements : {
-    type: String,
-    require: false,
-    default: null
-  },
-  kindSpecification : {
-    type: String,
-    require: false,
-    default: null
-  },
-  threedimensional : {
-    type: Boolean,
-    require: false,
-    default: null
-  },
-  threedimensionalSpecification : {
-    type: String,
-    require: false,
-    default: null
-  },
-  holographic : {
-    type: Boolean,
-    require: false,
-    default: null
-  },
-  holographicSpecification : {
-    type: String,
-    require: false,
-    default: null
-  },
-  sound : {
-    type: Boolean,
-    require: false,
-    default: null
-  },
-  soundSpecification : {
-    type: String,
-    require: false,
-    default: null
-  },
-  olfactory : {
-    type: Boolean,
-    require: false,
-    default: null
-  },
-  olfactorySpecification : {
-    type: String,
-    require: false,
-    default: null
-  },
-  color : {
-    type: Boolean,
-    require: false,
-    default: null
-  },
-  colorTrademarkSpecification : {
-    type: String,
-    require: false,
-    default: null
-  },
-  light : {
-    type: Boolean,
-    require: false,
-    default: null
-  },
-  lightSpecification : {
-    type: String,
-    require: false,
-    default: null
-  },
-  changing : {
-    type: Boolean,
-    require: false,
-    default: null
-  },
-  changingSpecification : {
-    type: String,
-    require: false,
-    default: null
-  },
-  positional : {
-    type: Boolean,
-    require: false,
-    default: null
-  },
-  positionalSpecification : {
-    type: String,
-    require: false,
-    default: null
-  },
-  actual : {
-    type: Boolean,
-    require: false,
-    default: null
-  },
-  publicationURL : {
-    type: String,
-    require: false,
-    default: null
+  updatedAt: {
+    type: Date,
+    default: Date.now
   }
 })
 

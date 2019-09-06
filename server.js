@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
-const getConfig = require('./lib/getConfig');
 const bodyParser = require('body-parser');
 const rpc = require('./RPC');
+const getConfig = require('./lib/getConfig');
 const config = getConfig('config');
 
 function server() {
@@ -16,7 +16,6 @@ function server() {
       const action = await rpc.call({}, req.body);
       res.send(action);
     });
-
 
     app.listen(config.port, config.bind, () => {
       console.info('Сервер запушен localhost:' + config.port);
