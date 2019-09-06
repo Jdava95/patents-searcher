@@ -50,10 +50,11 @@ node app.js
 > fileHandler()
 
 ```javascript
-  await fileHandler(Model, {name, path});
+  await fileHandler(Model, parserOptions, {name, path});
 ```
-fileHandler принимает на вход 3 праметра:
+fileHandler принимает на вход 4 параметра:
   - *Model* - ссылка на схему модели
+  - *parserOptions* опции для парсинга
   - *name* - имя модели
   - *path* - путь к csv файлу
 
