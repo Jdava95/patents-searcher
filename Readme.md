@@ -94,3 +94,38 @@ await uploadData(url, Model, name, parserOptions);
 ```javascript
   await checkUpdate(url, Model, name, parseOptions);
 ```
+
+# Routing
+
+В сервисе присутствует роутинг для запросов:
+
+```javascript
+  app.post('/rpc', async (req, res) => {
+    const action = await rpc.call({}, req.body);
+    res.send(action);
+  });
+```
+
+## Построение запроса
+
+Обращение к сервису:
+
+>localhost:3000/prc
+
+В bind и port ставится в зависимости от того, где у вас располагается сервер и с каким портом
+
+В теле запроса вы должны указать 
+
+```javascript
+{
+    "module": "Patent",
+    "method": "getByAuthors",
+    "arguments": {
+    	"name": "Абдрахманов Ильдус"
+    }
+}
+```
+
+- module - Модуль rpc
+- method - используемый метод
+- arguments - аргументы которые мы передаем для поиска
