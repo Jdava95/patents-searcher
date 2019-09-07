@@ -106,28 +106,6 @@ await uploadData(url, Model, name, parserOptions);
   });
 ```
 
-## Построение запроса
-
-Обращение к сервису:
-
->localhost:3000/prc
-
-В bind и port ставится в зависимости от того, где у вас располагается сервер и с каким портом
-
-В теле запроса вы должны указать 
-
-```javascript
-{
-    "module": "Patent",
-    "method": "getByAuthors",
-    "arguments": {}
-}
-```
-
-- module - Модуль rpc
-- method - используемый метод
-- arguments - аргументы которые мы передаем для поиска
-
 ## API / Methos
 
 Входные параметры и их типы:
@@ -137,6 +115,25 @@ await uploadData(url, Model, name, parserOptions);
 - lastId (objectId) - id - является обязательным при пагинации, если записей более 10 вам нужно прислать последний id записи, что бы продолжить просмотр подбора.
 
 ## Request
+
+### Построение запроса
+
+Обращение к сервису:
+
+- module - Модуль rpc
+- method - используемый метод
+- arguments - аргументы которые мы передаем для поиска
+
+  Пример запроса
+  ```json
+  {
+    "module": "ProgramRegistry",
+    "method": "getByAuthors",
+    "arguments": { 
+      "name": "Иванов"
+    }
+  }
+  ```
 
 #### Patent - патенты
 
@@ -160,17 +157,6 @@ await uploadData(url, Model, name, parserOptions);
  - getByRegNumber - number - поиск по регистрационному номеру
 
  ## Response
-
-  Пример запроса
-  ```json
-  {
-    "module": "ProgramRegistry",
-    "method": "getByAuthors",
-    "arguments": { 
-      "name": "Иванов"
-    }
-  }
-  ```
 
  В ответ вам приходит JSON содержащую в себе информацию по запросу 
  пример ответа:
