@@ -9,6 +9,7 @@ const Version = require('../storage/Version');
  * @param {Model} Model монгусовская модель
  * @param {String} name имя модели
  * @param {Object} parserOptions объект Опций для парсинга
+ * @returns {Promise}
  */
 async function checkUpdate(url, Model, name, parserOptions) {
   //Проверяем URL на валидность, возвращает URL ведущий к CSV

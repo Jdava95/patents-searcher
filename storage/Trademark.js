@@ -85,7 +85,13 @@ const TrademarkSchema = Schema({
   }
 })
 
-
+/**
+ * Проверит бд на совпадение данных из потока
+ * Если есть совпадения то обновит информацию
+ * Если совпадений нет то перезапишет
+ * @param {Object} options принимает на вход поток объектов
+ * @return {Promise} result
+ */
 TrademarkSchema.static('updateDoc', async function (options) {
   const Trademark = new this(options);
   const toUpdate = Trademark.toObject();
