@@ -120,12 +120,83 @@ await uploadData(url, Model, name, parserOptions);
 {
     "module": "Patent",
     "method": "getByAuthors",
-    "arguments": {
-    	"name": "Абдрахманов Ильдус"
-    }
+    "arguments": {}
 }
 ```
 
 - module - Модуль rpc
 - method - используемый метод
 - arguments - аргументы которые мы передаем для поиска
+
+## API / Methos
+
+Входные параметры и их типы:
+- number (Int) - целочисленный
+- name (String) - строка
+- limit (Int) - целочисленый - является не обязательным так как по умолчанию стоит 10 записей на 1 запрос. Минимальным количеством является 1, а максимальным 20.
+- lastId (objectId) - id - является обязательным при пагинации, если записей более 10 вам нужно прислать последний id записи, что бы продолжить просмотр подбора.
+
+## Request
+
+#### Patent - патенты
+
+В поле *module* ставится Patent (далее соответственно названию).
+
+Для поля *methos* доступны следущие методы:
+- getByRegNumber - number - получение информации по регистрационному номеру.
+- getByInventionName - name, limit, lastId - получение записей по имени изобретения
+- getByAuthors - name, limit, lastId - поиск записей по авторам
+
+#### Trademark - логотипы
+
+- getByRegNumber - number - олучение информации по регистрационному номеру.
+- getByRightHolders - name, limit, lastId - поиск записей по названию компании
+
+#### ProgramRegistry - реестр программ для эвм
+
+ - getByHolders - name, limit, lastId - поиск по названию компании
+ - getByProgram - name, limit, lastId - поиск по названию программы
+ - getByAuthors - name, limit, lastId - поиск по авторам регистрации
+ - getByRegNumber - number - поиск по регистрационному номеру
+
+ ## Response
+
+  Пример запроса
+  ```json
+  {
+    "module": "ProgramRegistry",
+    "method": "getByAuthors",
+    "arguments": { 
+      "name": "Иванов"
+    }
+  }
+  ```
+
+ В ответ вам приходит JSON содержащую в себе информацию по запросу 
+ пример ответа:
+ ```json
+  {
+    "payload": [
+        {
+          "_id": "5d6e204c33e508ffac38fea5",
+          "registrationNumber": 000000,
+          "__v": 0,
+          "actual": true,
+          "applicationDate": null,
+          "applicationNumber": 00000,
+          "authors": "Иванов И. И.",
+          "authorsCount": 1,
+          "contactToThirdParties": "",
+          "creationYear": null,
+          "programName": "Система учета данных",
+          "publicationURL": "http://www1.fips.ru/",
+          "registrationDate": "1970-01-01T05:32:20.711Z",
+          "registrationPublishDate": "1970-01-01T05:32:21.220Z",
+          "registrationPublishNumber": 4,
+          "rightHolders": "ООО Иванов",
+          "createdAt": "2019-09-07T08:44:00.212Z",
+          "updatedAt": "2019-09-07T08:44:00.212Z"
+      }
+    ]
+  }
+ ```
