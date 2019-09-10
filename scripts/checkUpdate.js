@@ -3,7 +3,7 @@ const uploadData = require('../lib/uploadData');
 const Version = require('../storage/Version');
 
 /**
- * Проверяет сайта роспатента на наличие новых файлов 
+ * Проверяет сайта роспатента на наличие новых файлов
  * Для добавления и обновления данных в коллекции
  * @param {url} Url к станице
  * @param {Model} Model монгусовская модель
@@ -11,7 +11,7 @@ const Version = require('../storage/Version');
  * @param {Object} parserOptions объект Опций для парсинга
  * @returns {Promise}
  */
-async function checkUpdate(url, Model, name, parserOptions) {
+async function checkUpdate(url, Model, name) {
   //Проверяем URL на валидность, возвращает URL ведущий к CSV
   const csvURL = await urlHandler(url);
   //Проверяем есть ли такой csvURL в базе
@@ -19,7 +19,7 @@ async function checkUpdate(url, Model, name, parserOptions) {
   if (check) return console.info('URL уже лежит в базе.');
   console.info('Запись пошла.');
   //Добавляет данные из CSV в базу данных
-  await uploadData(csvURL, Model, name, parserOptions);
+  await uploadData(csvURL, Model, name);
   //Добавляет новую запись об актуальности CSV
   await Version.addNewActualUrl(csvURL, name);
   console.info('Завершено.');

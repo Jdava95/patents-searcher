@@ -62,4 +62,6 @@ typings/
 
 config/
 
-data.csv
+*.csv
+
+.env
