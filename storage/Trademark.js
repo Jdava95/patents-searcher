@@ -81,15 +81,11 @@ const TrademarkSchema = Schema({
   positional :Boolean,
   positionalSpecification :String,
   actual :Boolean,
-  publicationURL :String,
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now
-  }
+  publicationURL :String
+},
+{ 
+  timestamps: true,
+  versionKey: false
 })
 
 /**

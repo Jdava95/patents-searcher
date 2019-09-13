@@ -58,9 +58,7 @@ module.exports = {
       'positional' ,
       'positionalSpecification' ,
       'actual' ,
-      'publicationURL' ,
-      'createdAt',
-      'updatedAt'
+      'publicationURL'
     ]  ,
     options: {
         from: 2
@@ -81,9 +79,7 @@ module.exports = {
       'registrationPublishDate',
       'registrationPublishNumber',
       'actual',
-      'publicationURL',
-      'createdAt',
-      'updatedAt'
+      'publicationURL'
     ]  ,
     options: {
         from: 2
@@ -136,9 +132,7 @@ module.exports = {
       'inventionFormulaNumbersWhichPatentTermProlonged',
       'additionalPatent',
       'actual',
-      'publicationURL',
-      'createdAt',
-      'updatedAt'
+      'publicationURL'
     ]  ,
     options: {
         from: 2

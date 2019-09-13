@@ -4,13 +4,15 @@ const queryValidity = require('./lib/queryValidity');
 const checkLimit = require('./lib/checkLimit');
 const convertDate = require('./lib/convertDate');
 const updateDoc = require('./lib/updateDoc');
+const splitAndConvert = require('./lib/splitAndConvert')
 
 /**
  * Схема патента для монгуса
  */
 const ProgramRegistrySchema = Schema({
   registrationNumber: {
-    type: Number
+    type: Number,
+    index: true
   },
   registrationDate: {
     type: Date,
@@ -22,19 +24,14 @@ const ProgramRegistrySchema = Schema({
     set: convertDate
   },
   authors: {
-    type: String,
+    type: Array,
+    set: splitAndConvert,
     index: true
   },
   authorsCount: Number,
-  rightHolders: {
-    type: String,
-    index: true
-  },
+  rightHolders: String,
   contactToThirdParties: String,
-  programName: {
-    type: String,
-    index: true
-  },
+  programName: String,
   creationYear: Number,
   registrationPublishDate: {
     type: Date,
@@ -42,15 +39,11 @@ const ProgramRegistrySchema = Schema({
   },
   registrationPublishNumber: Number,
   actual: Boolean,
-  publicationURL: String,  
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now
-  }
+  publicationURL: String
+},
+{ 
+  timestamps: true,
+  versionKey: false
 });
 
 /**

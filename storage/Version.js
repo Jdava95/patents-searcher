@@ -6,6 +6,10 @@ const VersionScheme = Schema({
   url: String,
   name: String,
   actual: Boolean
+},
+{ 
+  timestamps: true,
+  versionKey: false
 });
 
 /**

@@ -4,7 +4,7 @@ const queryValidity = require('./lib/queryValidity');
 const checkLimit = require('./lib/checkLimit');
 const convertDate = require('./lib/convertDate');
 const updateDoc = require('./lib/updateDoc');
-const splitAndConvertDate = require('./lib/splitAndConvertDate')
+const splitAndConvert = require('./lib/splitAndConvert')
 
 const PatentSchema = Schema({
   registrationNumber: {
@@ -21,7 +21,8 @@ const PatentSchema = Schema({
     set: convertDate
   },
   authors: {
-    type: String,
+    type: Array,
+    set: splitAndConvert,
     index: true
   },
   authorsLatin: String,
@@ -29,35 +30,35 @@ const PatentSchema = Schema({
   patentHoldersLatin: String,
   correspondenceAddress: String,
   correspondenceAddressLatin: String,
-  inventionName: {
-    type: String,
-    index: true
-  },
+  inventionName: String,
   patentStartingDate: {
     type: Date,
     set: convertDate
   },
-  crimeanInventionApplicationNumberStateRegistrationUkraine: Number,
+  crimeanInventionApplicationNumberStateRegistrationUkraine: String,
   crimeanInventionApplicationDateStateRegistrationUkraine: Number,
   crimeanInventionPatentNumberUkraine: Number,
   receiptDateAdditionalDataApplication: Number,
   dateApplicationWhichAdditionalDataHasBeenReceived: Number,
   numberApplicationWhichAdditionalDataHasBeenReceived: Number,
-  initialApplicationNumber: Number,
+  initialApplicationNumber: String,
   initialApplicationDate: Number,
   initialApplicationPriorityDate: Number,
   previousApplicationNumber: String,
-  previousApplicationDate: Number,
+  previousApplicationDate: {
+    type: Array,
+    set: splitAndConvert
+  },
   parisConventionPriorityNumber: String,
   parisConventionPriorityDate: {
     type: Array,
-    set: splitAndConvertDate
+    set: splitAndConvert
   },
   parisConventionPriorityCountryCode: String,
   pctApplicationExaminationStartDate: Number,
   pctApplicationNumber: String,
   pctApplicationDate: Number,
-  pctApplicationPublishNumber: Number,
+  pctApplicationPublishNumber: String,
   pctApplicationPublishDate: Number,
   eaApplicationNumber: Number,
   eaApplicationDate: Number,
@@ -76,15 +77,11 @@ const PatentSchema = Schema({
   inventionFormulaNumbersWhichPatentTermProlonged: String,
   additionalPatent: Boolean,
   actual: Boolean,
-  publicationURL: String,
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now
-  }
+  publicationURL: String
+},
+{ 
+  timestamps: true,
+  versionKey: false
 })
 
 /**
