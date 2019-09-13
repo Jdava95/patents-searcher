@@ -18,7 +18,7 @@ function server() {
     });
 
     app.listen(config.port, config.bind, () => {
-      console.info('Сервер запушен localhost:' + config.port);
+      console.info('Server was started');
       return resolve();
     }).on('error', ()=> {return reject});
   })

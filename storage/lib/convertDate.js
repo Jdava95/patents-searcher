@@ -2,7 +2,7 @@ const moment = require('moment');
 
 /**
  * Приведение числа в дату
- * @param {Int} value дата в целочисленном виде
+ * @param {Number} value дата в целочисленном виде
  * @returns {Date} date возвращает дату в формате Date
  */
 function convertDate(value) {

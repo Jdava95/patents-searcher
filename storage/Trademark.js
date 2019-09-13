@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const queryValidity = require('../lib/queryValidity');
-const checkLimit = require('../lib/checkLimit');
-const convertDate = require('../lib/convertDate');
+const queryValidity = require('./lib/queryValidity');
+const checkLimit = require('./lib/checkLimit');
+const convertDate = require('./lib/convertDate');
+const updateDoc = require('./lib/updateDoc');
 
 const TrademarkSchema = Schema({
-  registrationNumber  :String,
+  registrationNumber  :{
+    type: String,
+    index: true
+  },
   registrationDate : {
     type: Date,
     set: convertDate
@@ -44,8 +48,11 @@ const TrademarkSchema = Schema({
     type: Date,
     set: convertDate
   },
-  rightHolderName  :String,
-  foreignRightHolderName  :String,
+  rightHolderName :{
+    type: String,
+    index: true
+  },
+  foreignRightHolderName :String,
   rightHolderAddress  :String,
   rightHolderCountryCode :String,
   rightHolderOgrn :String,
@@ -92,13 +99,7 @@ const TrademarkSchema = Schema({
  * @param {Object} options принимает на вход поток объектов
  * @return {Promise} result
  */
-TrademarkSchema.static('updateDoc', async function updateDoc(options) {
-  return await this.updateOne({
-    registrationNumber: options.registrationNumber
-  }, options, {
-    upsert: true
-  })
-});
+TrademarkSchema.static('updateDoc', updateDoc);
 
 /**
  * Поиск по регистрационному номеру

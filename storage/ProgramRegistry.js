@@ -1,14 +1,17 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const queryValidity = require('../lib/queryValidity');
-const checkLimit = require('../lib/checkLimit');
-const convertDate = require('../lib/convertDate');
+const queryValidity = require('./lib/queryValidity');
+const checkLimit = require('./lib/checkLimit');
+const convertDate = require('./lib/convertDate');
+const updateDoc = require('./lib/updateDoc');
 
 /**
  * Схема патента для монгуса
  */
 const ProgramRegistrySchema = Schema({
-  registrationNumber: Number,
+  registrationNumber: {
+    type: Number
+  },
   registrationDate: {
     type: Date,
     set: convertDate
@@ -18,11 +21,20 @@ const ProgramRegistrySchema = Schema({
     type: Date,
     set: convertDate
   },
-  authors: String,
+  authors: {
+    type: String,
+    index: true
+  },
   authorsCount: Number,
-  rightHolders: String,
+  rightHolders: {
+    type: String,
+    index: true
+  },
   contactToThirdParties: String,
-  programName: String,
+  programName: {
+    type: String,
+    index: true
+  },
   creationYear: Number,
   registrationPublishDate: {
     type: Date,
@@ -48,13 +60,7 @@ const ProgramRegistrySchema = Schema({
  * @param {Object} options принимает на вход поток объектов
  * @return {Promise} result
  */
-ProgramRegistrySchema.static('updateDoc', async function updateDoc(options) {
-  return await this.updateOne({
-    registrationNumber: options.registrationNumber
-  }, options, {
-    upsert: true
-  })
-});
+ProgramRegistrySchema.static('updateDoc', updateDoc);
 
 /**
  * делает запрос в базу по параметру "Имя компании"

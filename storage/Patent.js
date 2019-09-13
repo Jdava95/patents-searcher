@@ -1,12 +1,16 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const queryValidity = require('../lib/queryValidity');
-const checkLimit = require('../lib/checkLimit');
-const convertDate = require('../lib/convertDate');
-const splitAndConvertDate = require('../lib/splitAndConvertDate')
+const queryValidity = require('./lib/queryValidity');
+const checkLimit = require('./lib/checkLimit');
+const convertDate = require('./lib/convertDate');
+const updateDoc = require('./lib/updateDoc');
+const splitAndConvertDate = require('./lib/splitAndConvertDate')
 
 const PatentSchema = Schema({
-  registrationNumber: Number,
+  registrationNumber: {
+    type: Number,
+    index: true
+  },
   registrationDate: {
     type: Date,
     set: convertDate
@@ -16,13 +20,19 @@ const PatentSchema = Schema({
     type: Date,
     set: convertDate
   },
-  authors: String,
+  authors: {
+    type: String,
+    index: true
+  },
   authorsLatin: String,
   patentHolders: String,
   patentHoldersLatin: String,
   correspondenceAddress: String,
   correspondenceAddressLatin: String,
-  inventionName: String,
+  inventionName: {
+    type: String,
+    index: true
+  },
   patentStartingDate: {
     type: Date,
     set: convertDate
@@ -84,13 +94,7 @@ const PatentSchema = Schema({
  * @param {Object} options принимает на вход поток объектов
  * @return {Promise} result
  */
-PatentSchema.static('updateDoc', async function updateDoc(options) {
-  return await this.updateOne({
-    registrationNumber: options.registrationNumber
-  }, options, {
-    upsert: true
-  })
-});
+PatentSchema.static('updateDoc', updateDoc);
 
 /**
  * делает запрос в базу по параметру "Номер регистрации"
