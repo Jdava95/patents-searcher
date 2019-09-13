@@ -36,7 +36,7 @@ const TrademarkSchema = Schema({
   crimeanTrademarkApplicationNumberStateRegistrationUkraine :String,
   crimeanTrademarkApplicationDateStateRegistrationUkraine :Number,
   crimeanTrademarkCertificateNumberUkraine :String,
-  exclusiveRightsTransferAgreementRegistrationNumber :Number,
+  exclusiveRightsTransferAgreementRegistrationNumber :String,
   exclusiveRightsTransferAgreementRegistrationDate :Number,
   legallyRelatedApplications :String,
   legallyRelatedRegistrations :String,
@@ -48,7 +48,7 @@ const TrademarkSchema = Schema({
   foreignRightHolderName  :String,
   rightHolderAddress  :String,
   rightHolderCountryCode :String,
-  rightHolderOgrn :Number,
+  rightHolderOgrn :String,
   rightHolderInn :Number,
   correspondenceAddress :String,
   collective :Boolean,
@@ -92,19 +92,12 @@ const TrademarkSchema = Schema({
  * @param {Object} options принимает на вход поток объектов
  * @return {Promise} result
  */
-TrademarkSchema.static('updateDoc', async function (options) {
-  const Trademark = new this(options);
-  const toUpdate = Trademark.toObject();
-  delete toUpdate._id;
-  const result = await this.updateOne({
-      registrationNumber: options.registrationNumber
-    }, {
-      $set: toUpdate
-    }, {
-      upsert: true
-    })
-    .exec();
-  return result;
+TrademarkSchema.static('updateDoc', async function updateDoc(options) {
+  return await this.updateOne({
+    registrationNumber: options.registrationNumber
+  }, options, {
+    upsert: true
+  })
 });
 
 /**

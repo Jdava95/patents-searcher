@@ -48,26 +48,19 @@ const ProgramRegistrySchema = Schema({
  * @param {Object} options принимает на вход поток объектов
  * @return {Promise} result
  */
-ProgramRegistrySchema.static('updateDoc', async function (options) {
-  const programRegistry = new this(options);
-  const toUpdate = programRegistry.toObject();
-  delete toUpdate._id;
-  const result = await this.updateOne({
-      registrationNumber: options.registrationNumber
-    }, {
-      $set: toUpdate
-    }, {
-      upsert: true
-    })
-    .exec();
-  return result;
+ProgramRegistrySchema.static('updateDoc', async function updateDoc(options) {
+  return await this.updateOne({
+    registrationNumber: options.registrationNumber
+  }, options, {
+    upsert: true
+  })
 });
 
 /**
  * делает запрос в базу по параметру "Имя компании"
  * @param {String} name имя организации
- * @param {Int} limit лимит записей за вывод
- * @param {Int} lastId последний id за вывод
+ * @param {Number} limit лимит записей за вывод
+ * @param {Number} lastId последний id за вывод
  * @return {Promise}
  */
 ProgramRegistrySchema.static('getByHolders', async function (name, limit, lastId) {
@@ -79,12 +72,12 @@ ProgramRegistrySchema.static('getByHolders', async function (name, limit, lastId
 /**
  * делает запрос в базу по параметру "Название программы"
  * @param {String} name имя организации
- * @param {Int} limit лимит записей за вывод
- * @param {Int} lastId последний id за вывод
+ * @param {Number} limit лимит записей за вывод
+ * @param {Number} lastId последний id за вывод
  * @return {Promise} 
  */
 ProgramRegistrySchema.static('getByProgram', async function (name, limit, lastId) {
-  const query = queryValidity('nameProgram', name, lastId);
+  const query = queryValidity('programName', name, lastId);
   const size = checkLimit(limit);
   return await this.find(query).limit(size).exec();
 })
@@ -92,8 +85,8 @@ ProgramRegistrySchema.static('getByProgram', async function (name, limit, lastId
 /**
  * делает запрос в коллекцию по параметру "Авторы"
  * @param {String} name имя организации
- * @param {Int} limit лимит записей за вывод
- * @param {Int} lastId последний id за вывод
+ * @param {Number} limit лимит записей за вывод
+ * @param {Number} lastId последний id за вывод
  * @return {Promise}
  */
 ProgramRegistrySchema.static('getByAuthors', async function (name, limit, lastId) {
@@ -104,7 +97,7 @@ ProgramRegistrySchema.static('getByAuthors', async function (name, limit, lastId
 
 /**
  * делает запрос в коллекцию по параметру регистрационный номер
- * @param {Int} number номер регистрации
+ * @param {Number} number номер регистрации
  * @return {Promise}
  */
 ProgramRegistrySchema.static('getByRegNumber', async function(number){

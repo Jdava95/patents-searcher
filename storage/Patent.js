@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const queryValidity = require('../lib/queryValidity');
 const checkLimit = require('../lib/checkLimit');
 const convertDate = require('../lib/convertDate');
+const splitAndConvertDate = require('../lib/splitAndConvertDate')
 
 const PatentSchema = Schema({
   registrationNumber: Number,
@@ -10,7 +11,7 @@ const PatentSchema = Schema({
     type: Date,
     set: convertDate
   },
-  applicationNumber: Number,
+  applicationNumber: String,
   applicationDate: {
     type: Date,
     set: convertDate
@@ -35,13 +36,16 @@ const PatentSchema = Schema({
   initialApplicationNumber: Number,
   initialApplicationDate: Number,
   initialApplicationPriorityDate: Number,
-  previousApplicationNumber: Number,
+  previousApplicationNumber: String,
   previousApplicationDate: Number,
-  parisConventionPriorityNumber: Number,
-  parisConventionPriorityDate: Number,
+  parisConventionPriorityNumber: String,
+  parisConventionPriorityDate: {
+    type: Array,
+    set: splitAndConvertDate
+  },
   parisConventionPriorityCountryCode: String,
   pctApplicationExaminationStartDate: Number,
-  pctApplicationNumber: Number,
+  pctApplicationNumber: String,
   pctApplicationDate: Number,
   pctApplicationPublishNumber: Number,
   pctApplicationPublishDate: Number,
@@ -81,30 +85,24 @@ const PatentSchema = Schema({
  * @return {Promise} result
  */
 PatentSchema.static('updateDoc', async function updateDoc(options) {
-  const Patent = new this(options);
-  const toUpdate = Patent.toObject();
-  delete toUpdate._id;
-  const result = await this.updateOne({
-      registrationNumber: options.registrationNumber
-    }, {
-      $set: toUpdate
-    }, {
-      upsert: true
-    })
-    .exec();
-  return result;
+  return await this.updateOne({
+    registrationNumber: options.registrationNumber
+  }, options, {
+    upsert: true
+  })
 });
-
 
 /**
  * делает запрос в базу по параметру "Номер регистрации"
- * @param {Int} number номер регистрации
- * @param {Int} limit лимит записей за вывод
- * @param {Int} lastId последний id за вывод
+ * @param {Number} number номер регистрации
+ * @param {Number} limit лимит записей за вывод
+ * @param {Number} lastId последний id за вывод
  * @return {Promise}
  */
 PatentSchema.static('getByRegNumber', async function getByRegNumber(number) {
-  return await this.findOne({registrationNumber: number}).exec();
+  return await this.findOne({
+    registrationNumber: number
+  }).exec();
 });
 
 /**
@@ -123,8 +121,8 @@ PatentSchema.static('getByAuthors', async function getByAuthors(name, limit, las
 /**
  * делает запрос в коллекцию по параметру "Название работы"
  * @param {String} name имя организации
- * @param {Int} limit лимит записей за вывод
- * @param {Int} lastId последний id за вывод
+ * @param {Number} limit лимит записей за вывод
+ * @param {Number} lastId последний id за вывод
  * @return {Promise}
  */
 PatentSchema.static('getByInventionName', async function getByInventionName(name, limit, lastId) {
