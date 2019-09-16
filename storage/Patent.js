@@ -82,7 +82,11 @@ const PatentSchema = Schema({
 { 
   timestamps: true,
   versionKey: false
-})
+});
+/**
+ * Добавляет полнотекстную индексацию по авторам и названиям изобретений
+ */
+PatentSchema.index({ authors: "text", inventionName: "text"});
 
 /**
  * Проверит бд на совпадение данных из потока
