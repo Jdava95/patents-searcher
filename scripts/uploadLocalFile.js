@@ -2,6 +2,9 @@ const fileHandler = require('../lib/fileHandler');
 const path = require('path');
 const bootstrap = require('../bootstrap');
 
+/**
+ * Обновление через локальный файл
+ */
 async function uploadLocalFile() {
   let Model = require(`../storage/${process.env.Name}`);
   let Name = process.env.Name;
