@@ -62,7 +62,7 @@ ProgramRegistrySchema.static('updateDoc', updateDoc);
  * @param {Number} lastId последний id за вывод
  * @return {Promise}
  */
-ProgramRegistrySchema.static('getByHolders', async function (name, limit, lastId) {
+ProgramRegistrySchema.static('getByHolders', async function getByHolders(name, limit, lastId) {
   const query = queryValidity('rightHolders', name, lastId);
   const size = checkLimit(limit);
   return await this.find(query).limit(size).exec();
@@ -75,7 +75,7 @@ ProgramRegistrySchema.static('getByHolders', async function (name, limit, lastId
  * @param {Number} lastId последний id за вывод
  * @return {Promise} 
  */
-ProgramRegistrySchema.static('getByProgram', async function (name, limit, lastId) {
+ProgramRegistrySchema.static('getByProgram', async function getByProgram(name, limit, lastId) {
   const query = queryValidity('programName', name, lastId);
   const size = checkLimit(limit);
   return await this.find(query).limit(size).exec();
@@ -88,7 +88,7 @@ ProgramRegistrySchema.static('getByProgram', async function (name, limit, lastId
  * @param {Number} lastId последний id за вывод
  * @return {Promise}
  */
-ProgramRegistrySchema.static('getByAuthors', async function (name, limit, lastId) {
+ProgramRegistrySchema.static('getByAuthors', async function getByAuthors(name, limit, lastId) {
   const query = queryValidity('authors', name, lastId);
   const size = checkLimit(limit);
   return await this.find(query).limit(size).exec();
@@ -99,8 +99,17 @@ ProgramRegistrySchema.static('getByAuthors', async function (name, limit, lastId
  * @param {Number} number номер регистрации
  * @return {Promise}
  */
-ProgramRegistrySchema.static('getByRegNumber', async function(number){
+ProgramRegistrySchema.static('getByRegNumber', async function getByRegNumber(number){
   return await this.findOne({registrationNumber : number}).exec();
+})
+
+/**
+ * Позволяет получить инфрмацию по имени создателя и названию программы
+ */
+ProgramRegistrySchema.static('getInfo', async function getInfo(name, limit, countRec) {
+  const size = checkLimit(limit);
+  return await this.find( { $text: { $search: name } }, { score: { $meta: "textScore" } } )
+    .sort( {score: {$meta: "textScore" } }).limit(size).skip(countRec).exec();
 })
 
 module.exports = mongoose.model('ProgramRegistry', ProgramRegistrySchema, 'ProgramRegistries');

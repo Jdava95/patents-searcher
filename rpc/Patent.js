@@ -27,5 +27,9 @@ module.exports = {
    */
   async getByAuthors (obj) {
     return await Patent.getByAuthors(obj.name, obj.limit, obj.lastId);
+  },
+
+  async getInfo(obj) {
+    return await Patent.getInfo(obj.name, obj.limit, obj.countRec);
   }
 }

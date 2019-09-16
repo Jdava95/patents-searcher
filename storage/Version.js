@@ -16,7 +16,7 @@ const VersionScheme = Schema({
  * @param {String} url url scv файла
  * @param {String} name имя монгусовской модели
  */
-VersionScheme.static('getLastVersion', async function (uri, name) {
+VersionScheme.static('getLastVersion', async function getLastVersion(uri, name) {
   return await this.findOne({
     url: uri,
     modelName: name,
@@ -30,7 +30,7 @@ VersionScheme.static('getLastVersion', async function (uri, name) {
  * после чего создает новую актуальную запись
  * @param {String} url 
  */
-VersionScheme.static('addNewActualUrl', async function (uri, name) {
+VersionScheme.static('addNewActualUrl', async function addNewActualUrl(uri, name) {
   await this.updateOne({
     actual: true,
     modelName: name

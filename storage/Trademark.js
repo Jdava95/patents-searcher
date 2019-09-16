@@ -102,7 +102,7 @@ TrademarkSchema.static('updateDoc', updateDoc);
  * @param {String} number регистрационный номер
  * @return {Promise}
  */
-TrademarkSchema.static('getByRegNumber', async function(number) {
+TrademarkSchema.static('getByRegNumber', async function getByRegNumber(number) {
   return await this.findOne({ registrationNumber: number}).exec();
 })
 
@@ -113,7 +113,7 @@ TrademarkSchema.static('getByRegNumber', async function(number) {
  * @param {Int} lastId последний id за вывод
  * @return {Promise}
  */
-TrademarkSchema.static('getByRightHolders', async function (name, limit, lastId) {
+TrademarkSchema.static('getByRightHolders', async function getByRightHolders(name, limit, lastId) {
   const query = queryValidity('rightHolderName', name, lastId);
   const size = checkLimit(limit);
   return await this.find(query).limit(size).exec();

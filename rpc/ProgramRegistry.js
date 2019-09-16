@@ -35,5 +35,14 @@ module.exports = {
    */
   async getByRegNumber(obj) {
     return await ProgramRegistry.getByRegNumber(obj.number);
+  },
+
+    /**
+   * поиск по авторам и названию программы
+   * @param {Object} obj 
+   * @returns {Promise}
+   */
+  async getInfo(obj) {
+    return await ProgramRegistry.getInfo(obj.name, obj.limit, obj.countRec);
   }
 }

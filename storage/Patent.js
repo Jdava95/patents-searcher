@@ -132,4 +132,12 @@ PatentSchema.static('getByInventionName', async function getByInventionName(name
   return await this.find(query).limit(size).exec();
 })
 
+
+PatentSchema.static('getInfo', async function getInfo(name, limit, countRec) {
+  const size = checkLimit(limit);
+  return await this.find( { $text: { $search: name } }, { score: { $meta: "textScore" } } )
+  .sort( {score: {$meta: "textScore" } }).limit(size).skip(countRec).exec();
+
+})
+
 module.exports = mongoose.model('Patent', PatentSchema, 'Patents');
