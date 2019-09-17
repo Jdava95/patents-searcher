@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const queryValidity = require('./lib/queryValidity');
-const checkLimit = require('./lib/checkLimit');
 const convertDate = require('./lib/convertDate');
 const updateDoc = require('./lib/updateDoc');
+const createFinder = require('./lib/createFinder');
 
 const TrademarkSchema = Schema({
   registrationNumber  :{
@@ -109,14 +108,10 @@ TrademarkSchema.static('getByRegNumber', async function getByRegNumber(number) {
 /**
  * делает запрос в базу по параметру владелец компании
  * @param {String} name имя организации
- * @param {Int} limit лимит записей за вывод
- * @param {Int} lastId последний id за вывод
+ * @param {Number} limit лимит записей за вывод
+ * @param {Number} lastId последний id за вывод
  * @return {Promise}
  */
-TrademarkSchema.static('getByRightHolders', async function getByRightHolders(name, limit, lastId) {
-  const query = queryValidity('rightHolderName', name, lastId);
-  const size = checkLimit(limit);
-  return await this.find(query).limit(size).exec();
-});
+TrademarkSchema.static('getByRightHolders', createFinder('rightHolderName'));
 
 module.exports = mongoose.model('Trademark', TrademarkSchema, 'Trademarks');

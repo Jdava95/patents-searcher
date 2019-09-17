@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const queryValidity = require('./lib/queryValidity');
 const checkLimit = require('./lib/checkLimit');
 const convertDate = require('./lib/convertDate');
 const updateDoc = require('./lib/updateDoc');
-const splitAndConvert = require('./lib/splitAndConvert')
+const splitAndConvert = require('./lib/splitAndConvert');
+const createFinder = require('./lib/createFinder');
+
 
 /**
  * Схема патента для монгуса
@@ -41,7 +42,7 @@ const ProgramRegistrySchema = Schema({
   actual: Boolean,
   publicationURL: String
 },
-{ 
+{
   timestamps: true,
   versionKey: false
 });
@@ -67,24 +68,16 @@ ProgramRegistrySchema.static('updateDoc', updateDoc);
  * @param {Number} lastId последний id за вывод
  * @return {Promise}
  */
-ProgramRegistrySchema.static('getByHolders', async function getByHolders(name, limit, lastId) {
-  const query = queryValidity('rightHolders', name, lastId);
-  const size = checkLimit(limit);
-  return await this.find(query).limit(size).exec();
-});
+ProgramRegistrySchema.static('getByHolders', createFinder('rightHolders'));
 
 /**
  * делает запрос в базу по параметру "Название программы"
  * @param {String} name имя организации
  * @param {Number} limit лимит записей за вывод
  * @param {Number} lastId последний id за вывод
- * @return {Promise} 
+ * @return {Promise}
  */
-ProgramRegistrySchema.static('getByProgram', async function getByProgram(name, limit, lastId) {
-  const query = queryValidity('programName', name, lastId);
-  const size = checkLimit(limit);
-  return await this.find(query).limit(size).exec();
-})
+ProgramRegistrySchema.static('getByProgram', createFinder('programName'));
 
 /**
  * делает запрос в коллекцию по параметру "Авторы"
@@ -93,11 +86,7 @@ ProgramRegistrySchema.static('getByProgram', async function getByProgram(name, l
  * @param {Number} lastId последний id за вывод
  * @return {Promise}
  */
-ProgramRegistrySchema.static('getByAuthors', async function getByAuthors(name, limit, lastId) {
-  const query = queryValidity('authors', name, lastId);
-  const size = checkLimit(limit);
-  return await this.find(query).limit(size).exec();
-})
+ProgramRegistrySchema.static('getByAuthors', createFinder('authors'))
 
 /**
  * делает запрос в коллекцию по параметру регистрационный номер

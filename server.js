@@ -20,7 +20,7 @@ function server() {
     app.listen(config.port, config.bind, () => {
       console.info('Server was started');
       return resolve();
-    }).on('error', ()=> {return reject});
+    }).on('error', ()=> {return reject()});
   })
 }
 

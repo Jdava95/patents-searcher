@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const queryValidity = require('./lib/queryValidity');
 const checkLimit = require('./lib/checkLimit');
 const convertDate = require('./lib/convertDate');
 const updateDoc = require('./lib/updateDoc');
-const splitAndConvert = require('./lib/splitAndConvert')
+const splitAndConvert = require('./lib/splitAndConvert');
+const createFinder = require('./lib/createFinder');
 
 const PatentSchema = Schema({
   registrationNumber: {
@@ -79,7 +79,7 @@ const PatentSchema = Schema({
   actual: Boolean,
   publicationURL: String
 },
-{ 
+{
   timestamps: true,
   versionKey: false
 });
@@ -105,23 +105,17 @@ PatentSchema.static('updateDoc', updateDoc);
  * @return {Promise}
  */
 PatentSchema.static('getByRegNumber', async function getByRegNumber(number) {
-  return await this.findOne({
-    registrationNumber: number
-  }).exec();
+  return await this.findOne({registrationNumber: number}).exec();
 });
 
 /**
  * делает запрос в базу по параметру "Авторы"
  * @param {String} name имя организации
- * @param {Int} limit лимит записей за вывод
- * @param {Int} lastId последний id за вывод
- * @return {Promise} 
+ * @param {Number} limit лимит записей за вывод
+ * @param {Number} lastId последний id за вывод
+ * @return {Promise}
  */
-PatentSchema.static('getByAuthors', async function getByAuthors(name, limit, lastId) {
-  const query = queryValidity('authors', name, lastId);
-  const size = checkLimit(limit);
-  return await this.find(query).limit(size).exec();
-})
+PatentSchema.static('getByAuthors', createFinder('authors'))
 
 /**
  * делает запрос в коллекцию по параметру "Название работы"
@@ -130,11 +124,7 @@ PatentSchema.static('getByAuthors', async function getByAuthors(name, limit, las
  * @param {Number} lastId последний id за вывод
  * @return {Promise}
  */
-PatentSchema.static('getByInventionName', async function getByInventionName(name, limit, lastId) {
-  const query = queryValidity('inventionName', name, lastId);
-  const size = checkLimit(limit);
-  return await this.find(query).limit(size).exec();
-})
+PatentSchema.static('getByInventionName', createFinder('inventionName'));
 
 
 PatentSchema.static('getInfo', async function getInfo(name, limit, countRec) {
