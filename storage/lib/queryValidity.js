@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
  */
 function queryValidity (method, name, lastId) {
   const regex = new RegExp(name, 'i');
-  let query = { [method]:regex };
+  let query = { [method]: regex };
 
   if (lastId && mongoose.Types.ObjectId.isValid(lastId)) {
     query._id = {

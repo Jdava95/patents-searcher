@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const checkLimit = require('./lib/checkLimit');
 const convertDate = require('./lib/convertDate');
 const updateDoc = require('./lib/updateDoc');
 const splitAndConvert = require('./lib/splitAndConvert');
 const createFinder = require('./lib/createFinder');
+const fullTextSearcher = require('./lib/fullTextSearcher');
+const regNumSearcher = require('./lib/regNumSearcher');
 
 
 /**
@@ -50,7 +51,7 @@ const ProgramRegistrySchema = Schema({
 /**
  * Добавляет полнотекстную индексацию по авторам и названию программы
  */
-ProgramRegistrySchema.index({ authors: "text", programName: "text" });
+ProgramRegistrySchema.index({ authors: 'text', programName: 'text' });
 
 /**
  * Проверит бд на совпадение данных из потока
@@ -86,24 +87,18 @@ ProgramRegistrySchema.static('getByProgram', createFinder('programName'));
  * @param {Number} lastId последний id за вывод
  * @return {Promise}
  */
-ProgramRegistrySchema.static('getByAuthors', createFinder('authors'))
+ProgramRegistrySchema.static('getByAuthors', createFinder('authors'));
 
 /**
  * делает запрос в коллекцию по параметру регистрационный номер
  * @param {Number} number номер регистрации
  * @return {Promise}
  */
-ProgramRegistrySchema.static('getByRegNumber', async function getByRegNumber(number){
-  return await this.findOne({registrationNumber : number}).exec();
-})
+ProgramRegistrySchema.static('getByRegNumber', regNumSearcher);
 
 /**
  * Позволяет получить инфрмацию по имени создателя и названию программы
  */
-ProgramRegistrySchema.static('getInfo', async function getInfo(name, limit, countRec) {
-  const size = checkLimit(limit);
-  return await this.find( { $text: { $search: name } }, { score: { $meta: "textScore" } } )
-    .sort( {score: {$meta: "textScore" } }).limit(size).skip(countRec).exec();
-})
+ProgramRegistrySchema.static('getInfo', fullTextSearcher);
 
 module.exports = mongoose.model('ProgramRegistry', ProgramRegistrySchema, 'ProgramRegistries');

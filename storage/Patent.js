@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const checkLimit = require('./lib/checkLimit');
 const convertDate = require('./lib/convertDate');
 const updateDoc = require('./lib/updateDoc');
 const splitAndConvert = require('./lib/splitAndConvert');
 const createFinder = require('./lib/createFinder');
+const fullTextSearcher = require('./lib/fullTextSearcher');
+const regNumSearcher = require('./lib/regNumSearcher');
 
 const PatentSchema = Schema({
   registrationNumber: {
@@ -86,7 +87,7 @@ const PatentSchema = Schema({
 /**
  * Добавляет полнотекстную индексацию по авторам и названиям изобретений
  */
-PatentSchema.index({ authors: "text", inventionName: "text"});
+PatentSchema.index({ authors: 'text', inventionName: 'text'});
 
 /**
  * Проверит бд на совпадение данных из потока
@@ -99,39 +100,22 @@ PatentSchema.static('updateDoc', updateDoc);
 
 /**
  * делает запрос в базу по параметру "Номер регистрации"
- * @param {Number} number номер регистрации
- * @param {Number} limit лимит записей за вывод
- * @param {Number} lastId последний id за вывод
- * @return {Promise}
  */
-PatentSchema.static('getByRegNumber', async function getByRegNumber(number) {
-  return await this.findOne({registrationNumber: number}).exec();
-});
+PatentSchema.static('getByRegNumber', regNumSearcher);
 
 /**
  * делает запрос в базу по параметру "Авторы"
- * @param {String} name имя организации
- * @param {Number} limit лимит записей за вывод
- * @param {Number} lastId последний id за вывод
- * @return {Promise}
  */
-PatentSchema.static('getByAuthors', createFinder('authors'))
+PatentSchema.static('getByAuthors', createFinder('authors'));
 
 /**
  * делает запрос в коллекцию по параметру "Название работы"
- * @param {String} name имя организации
- * @param {Number} limit лимит записей за вывод
- * @param {Number} lastId последний id за вывод
- * @return {Promise}
  */
 PatentSchema.static('getByInventionName', createFinder('inventionName'));
 
-
-PatentSchema.static('getInfo', async function getInfo(name, limit, countRec) {
-  const size = checkLimit(limit);
-  return await this.find( { $text: { $search: name } }, { score: { $meta: "textScore" } } )
-  .sort( {score: {$meta: "textScore" } }).limit(size).skip(countRec).exec();
-
-})
+/**
+ * Позволяет получить инфрмацию по имени создателя и названию программы
+ */
+PatentSchema.static('getInfo', fullTextSearcher);
 
 module.exports = mongoose.model('Patent', PatentSchema, 'Patents');

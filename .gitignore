@@ -65,6 +65,3 @@ config/
 *.csv
 
 .env
-
-.eslintrc
-.eslintignore

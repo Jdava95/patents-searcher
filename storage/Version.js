@@ -43,6 +43,6 @@ VersionScheme.static('addNewActualUrl', async function addNewActualUrl(uri, name
     modelName: name,
     actual: true
   });
-})
+});
 
 module.exports = mongoose.model('Version', VersionScheme, 'Versions');

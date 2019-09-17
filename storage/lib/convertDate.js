@@ -1,4 +1,5 @@
-const moment = require('moment');
+const moment = require('moment-timezone');
+const DEFAULT_TIMEZONE = 'Europe/Moscow';
 
 /**
  * Приведение числа в дату
@@ -7,7 +8,7 @@ const moment = require('moment');
  */
 function convertDate(value) {
   if (!value) return null;
-  const parsed = moment(value, 'YYYYMMDD');
+  const parsed = moment(value, 'YYYYMMDD').tz(DEFAULT_TIMEZONE);
   if (!parsed.isValid()) return null;
   const date = new Date(+parsed);
   return date;

@@ -11,7 +11,7 @@ async function uploadLocalFile() {
   let PathToFile = path.join(__dirname, process.env.Path);
   
   await bootstrap();
-  await fileHandler(Model, { name: Name, path: PathToFile })
+  await fileHandler(Model, { name: Name, path: PathToFile });
 }
 
 if (module.parent) {

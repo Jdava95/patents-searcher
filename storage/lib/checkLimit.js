@@ -3,7 +3,7 @@ const Limit = {
   DEFAULT: 10,
   MAX: 20
 }
-const decimalSystemNumber = 10;
+const DECIMAL_SYSTEM_NUMBER = 10;
 
 /**
  * Данная функция может быть использована для обработки параметра количества записей, 
@@ -11,12 +11,13 @@ const decimalSystemNumber = 10;
  * @param {Number} limit число записей за вывод
  * @return {Number} limit
  */
-function checkLimit (limit) {
-  if (!limit || !parseInt(limit, decimalSystemNumber)) {
+function checkLimit(limit) {
+  const parsedLimit = parseInt(limit, DECIMAL_SYSTEM_NUMBER)
+  if (!(parsedLimit && parsedLimit)) {
     limit = Limit.DEFAULT;
-  } else if (parseInt(limit, decimalSystemNumber) < Limit.MIN) {
+  } else if (parsedLimit < Limit.MIN) {
     limit = Limit.MIN;
-  } else if (parseInt(limit, decimalSystemNumber) > Limit.MAX) {
+  } else if (parsedLimit > Limit.MAX) {
     limit = Limit.MAX;
   }
 
