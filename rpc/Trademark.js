@@ -6,8 +6,8 @@ module.exports = {
    * @param {Object} obj 
  * @returns {Promise}
    */
-  async getByRightHolders(obj) {
-    return await Trademark.getByRightHolders(obj.name , obj.limit, obj.lastId);
+  getByRightHolders(obj) {
+    return Trademark.getByRightHolders(obj.name , obj.limit, obj.lastId);
   },
 
 /**
@@ -15,7 +15,7 @@ module.exports = {
  * @param {Object} obj 
  * @returns {Promise}
  */
-  async getByRegNumber(obj) {
-    return await Trademark.getByRegNumber(obj.number)
+  getByRegNumber(obj) {
+    return Trademark.getByRegNumber(obj.number)
   }
 }

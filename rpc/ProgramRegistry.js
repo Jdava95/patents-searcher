@@ -6,8 +6,8 @@ module.exports = {
    * @param {Object} obj 
    * @returns {Promise}
    */
-  async getByHolders (obj) {
-    return await ProgramRegistry.getByHolders(obj.name, obj.limit, obj.lastId);
+  getByHolders (obj) {
+    return ProgramRegistry.getByHolders(obj.name, obj.limit, obj.lastId);
   },
 
   /**
@@ -15,8 +15,8 @@ module.exports = {
    * @param {Object} obj 
    * @returns {Promise}
    */
-  async getByProgram (obj) {
-    return await ProgramRegistry.getByProgram(obj.name, obj.limit, obj.lastId);
+  getByProgram (obj) {
+    return ProgramRegistry.getByProgram(obj.name, obj.limit, obj.lastId);
   },
 
   /**
@@ -24,8 +24,8 @@ module.exports = {
    * @param {Object} obj 
    * @returns {Promise}
    */
-  async getByAuthors (obj) {
-    return await ProgramRegistry.getByAuthors(obj.name, obj.limit, obj.lastId);
+  getByAuthors (obj) {
+    return ProgramRegistry.getByAuthors(obj.name, obj.limit, obj.lastId);
   },
 
     /**
@@ -33,8 +33,8 @@ module.exports = {
    * @param {Object} obj 
    * @returns {Promise}
    */
-  async getByRegNumber(obj) {
-    return await ProgramRegistry.getByRegNumber(obj.number);
+  getByRegNumber(obj) {
+    return ProgramRegistry.getByRegNumber(obj.number);
   },
 
     /**
@@ -42,7 +42,7 @@ module.exports = {
    * @param {Object} obj 
    * @returns {Promise}
    */
-  async getInfo(obj) {
-    return await ProgramRegistry.getInfo(obj.name, obj.limit, obj.countRec);
+  getInfo(obj) {
+    return ProgramRegistry.getInfo(obj.name, obj.limit, obj.countRec);
   }
 }

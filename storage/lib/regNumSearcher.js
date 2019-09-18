@@ -3,8 +3,8 @@
  * @param {Number} number 
  * @returns (Promise)
  */
-function regNumSearcher(number) {
-  return this.findOne({ registrationNumber: number }).exec();
+function regNumSearcher(registrationNumber) {
+  return this.findOne({ registrationNumber }).exec();
 }
 
 module.exports = regNumSearcher;

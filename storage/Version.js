@@ -38,11 +38,12 @@ VersionScheme.static('addNewActualUrl', async function addNewActualUrl(uri, name
     actual: false,
     modelName: name
   }).exec();
+
   await this.create({
     url: uri,
     modelName: name,
     actual: true
-  }).exec();
+  })
 });
 
 module.exports = mongoose.model('Version', VersionScheme, 'Versions');
