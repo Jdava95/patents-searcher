@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const rpc = require('./RPC');
 const getConfig = require('./lib/getConfig');
 const config = getConfig('config');
+const checkName = require('./lib/checkName');
 
 function server() {
   return new Promise((resolve, reject) => {
@@ -13,6 +14,8 @@ function server() {
     }));
   
     app.post('/rpc', async (req, res) => {
+      const check = checkName(req.body.arguments.name);
+      if(!check)res.status(421).send('Не правильно введен параметр');
       const action = await rpc.call({}, req.body);
       res.send(action);
     });
@@ -20,7 +23,7 @@ function server() {
     app.listen(config.port, config.bind, () => {
       console.info('Server was started');
       return resolve();
-    }).on('error', ()=> {return reject()});
+    }).on('error', reject);
   })
 }
 

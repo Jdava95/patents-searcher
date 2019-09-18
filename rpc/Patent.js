@@ -29,6 +29,12 @@ module.exports = {
     return await Patent.getByAuthors(obj.name, obj.limit, obj.lastId);
   },
 
+  /**
+   * поиск по параметрам автор и нащвание программы
+   * как вместе так и отдельно  
+   * @param {Object} obj 
+   * @returns {Promise}
+   */
   async getInfo(obj) {
     return await Patent.getInfo(obj.name, obj.limit, obj.countRec);
   }

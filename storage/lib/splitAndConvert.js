@@ -1,5 +1,12 @@
-const moment = require('moment');
+const moment = require('moment-timezone');
+const DEFAULT_TIMEZONE = 'Europe/Moscow';
 
+
+/**
+ * Принимает строку делает сплит и возвращает массив
+ * @param {String} value 
+ * @returns {Array} result
+ */
 function splitAndConvert (value) {
   if(!value) return null;
   const splitArray = value.split('\r\n')
@@ -8,7 +15,7 @@ function splitAndConvert (value) {
       return el;
     }
     
-    const parsed = moment(el, 'YYYYMMDD');
+    const parsed = moment(el, 'YYYYMMDD').tz(DEFAULT_TIMEZONE);
     const date = new Date(+parsed);
     return date;
   });

@@ -7,7 +7,6 @@ const createFinder = require('./lib/createFinder');
 const fullTextSearcher = require('./lib/fullTextSearcher');
 const regNumSearcher = require('./lib/regNumSearcher');
 
-
 /**
  * Схема патента для монгуса
  */
@@ -57,42 +56,26 @@ ProgramRegistrySchema.index({ authors: 'text', programName: 'text' });
  * Проверит бд на совпадение данных из потока
  * Если есть совпадения то обновит информацию
  * Если совпадений нет то перезапишет
- * @param {Object} options принимает на вход поток объектов
- * @return {Promise} result
  */
 ProgramRegistrySchema.static('updateDoc', updateDoc);
 
 /**
  * делает запрос в базу по параметру "Имя компании"
- * @param {String} name имя организации
- * @param {Number} limit лимит записей за вывод
- * @param {Number} lastId последний id за вывод
- * @return {Promise}
  */
 ProgramRegistrySchema.static('getByHolders', createFinder('rightHolders'));
 
 /**
  * делает запрос в базу по параметру "Название программы"
- * @param {String} name имя организации
- * @param {Number} limit лимит записей за вывод
- * @param {Number} lastId последний id за вывод
- * @return {Promise}
  */
 ProgramRegistrySchema.static('getByProgram', createFinder('programName'));
 
 /**
  * делает запрос в коллекцию по параметру "Авторы"
- * @param {String} name имя организации
- * @param {Number} limit лимит записей за вывод
- * @param {Number} lastId последний id за вывод
- * @return {Promise}
  */
 ProgramRegistrySchema.static('getByAuthors', createFinder('authors'));
 
 /**
  * делает запрос в коллекцию по параметру регистрационный номер
- * @param {Number} number номер регистрации
- * @return {Promise}
  */
 ProgramRegistrySchema.static('getByRegNumber', regNumSearcher);
 

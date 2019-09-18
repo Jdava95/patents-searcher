@@ -93,8 +93,6 @@ PatentSchema.index({ authors: 'text', inventionName: 'text'});
  * Проверит бд на совпадение данных из потока
  * Если есть совпадения то обновит информацию
  * Если совпадений нет то перезапишет
- * @param {Object} options принимает на вход поток объектов
- * @return {Promise} result
  */
 PatentSchema.static('updateDoc', updateDoc);
 

@@ -16,12 +16,12 @@ const VersionScheme = Schema({
  * @param {String} url url scv файла
  * @param {String} name имя монгусовской модели
  */
-VersionScheme.static('getLastVersion', async function getLastVersion(uri, name) {
-  return await this.findOne({
+VersionScheme.static('getLastVersion', function getLastVersion(uri, name) {
+  return this.findOne({
     url: uri,
     modelName: name,
     actual: true
-  })
+  }).exec();
 })
 
 /**
@@ -37,12 +37,12 @@ VersionScheme.static('addNewActualUrl', async function addNewActualUrl(uri, name
   }, {
     actual: false,
     modelName: name
-  });
+  }).exec();
   await this.create({
     url: uri,
     modelName: name,
     actual: true
-  });
+  }).exec();
 });
 
 module.exports = mongoose.model('Version', VersionScheme, 'Versions');

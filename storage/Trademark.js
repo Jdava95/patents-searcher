@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const convertDate = require('./lib/convertDate');
 const updateDoc = require('./lib/updateDoc');
 const createFinder = require('./lib/createFinder');
-const regNumSearcher = require('./libregNumSearcher');
+const regNumSearcher = require('./lib/regNumSearcher');
 
 const TrademarkSchema = Schema({
   registrationNumber : {
@@ -92,24 +92,16 @@ const TrademarkSchema = Schema({
  * Проверит бд на совпадение данных из потока
  * Если есть совпадения то обновит информацию
  * Если совпадений нет то перезапишет
- * @param {Object} options принимает на вход поток объектов
- * @return {Promise} result
  */
 TrademarkSchema.static('updateDoc', updateDoc);
 
 /**
  * Поиск по регистрационному номеру
- * @param {String} number регистрационный номер
- * @return {Promise}
  */
 TrademarkSchema.static('getByRegNumber', regNumSearcher)
 
 /**
  * делает запрос в базу по параметру владелец компании
- * @param {String} name имя организации
- * @param {Number} limit лимит записей за вывод
- * @param {Number} lastId последний id за вывод
- * @return {Promise}
  */
 TrademarkSchema.static('getByRightHolders', createFinder('rightHolderName'));
 
