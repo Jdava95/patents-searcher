@@ -4,11 +4,11 @@
  */
 function updateDoc(options) {
   return this.updateOne({
-      registrationNumber: options.registrationNumber
-    },
-    options, {
-      upsert: true
-    });
+    registrationNumber: options.registrationNumber
+  },
+  options, {
+    upsert: true
+  });
 }
 
 module.exports = updateDoc;
