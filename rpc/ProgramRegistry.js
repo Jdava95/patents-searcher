@@ -37,7 +37,7 @@ module.exports = {
     return ProgramRegistry.getByRegNumber(obj.number);
   },
 
-    /**
+  /**
    * поиск по авторам и названию программы
    * @param {Object} obj 
    * @returns {Promise}
