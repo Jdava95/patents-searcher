@@ -4,7 +4,7 @@ mongoose.set('useFindAndModify', false);
 
 const VersionScheme = Schema({
   url: String,
-  name: String,
+  model: String,
   actual: Boolean
 },
 { 
@@ -19,7 +19,7 @@ const VersionScheme = Schema({
 VersionScheme.static('getLastVersion', function getLastVersion(uri, name) {
   return this.findOne({
     url: uri,
-    modelName: name,
+    model: name,
     actual: true
   }).exec();
 })
@@ -33,15 +33,15 @@ VersionScheme.static('getLastVersion', function getLastVersion(uri, name) {
 VersionScheme.static('addNewActualUrl', async function addNewActualUrl(uri, name) {
   await this.updateOne({
     actual: true,
-    modelName: name
+    model: name
   }, {
     actual: false,
-    modelName: name
+    model: name
   }).exec();
 
   await this.create({
     url: uri,
-    modelName: name,
+    model: name,
     actual: true
   })
 });

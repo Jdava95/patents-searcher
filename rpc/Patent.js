@@ -1,7 +1,6 @@
 const Patent = require('../storage/Patent');
 
 module.exports = {
-
   /**
    * поиск по регистрационному номеру
    * @param {Object} obj 

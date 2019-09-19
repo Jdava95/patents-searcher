@@ -16,6 +16,6 @@ module.exports = {
  * @returns {Promise}
  */
   getByRegNumber(obj) {
-    return Trademark.getByRegNumber(obj.number)
+    return Trademark.getByRegNumber(obj.number);
   }
 }

@@ -1,6 +1,6 @@
 const fileHandler = require('../lib/fileHandler');
 const path = require('path');
-const bootstrap = require('../bootstrap');
+const connection = require('../db/connection');
 
 /**
  * Обновление через локальный файл
@@ -10,7 +10,7 @@ async function uploadLocalFile() {
   let Name = process.env.Name;
   let PathToFile = path.join(__dirname, process.env.Path);
   
-  await bootstrap();
+  await connection();
   await fileHandler(Model, { name: Name, path: PathToFile });
 }
 
